@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Workspace | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <!-- Lucide Icons Vector Set -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Interactive Charting Core CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (function() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) {
+        window.location.replace('/login');
+        return;
+      }
+      try {
+        const user = JSON.parse(userStr);
+        const cleanEmail = user && user.email ? user.email.trim().toLowerCase() : '';
+        const isAllowedAdmin = cleanEmail === 'raisheraz7181@gmail.com' || cleanEmail === 'ficerdigitalagency@gmail.com' || (user && user.role === 'admin');
+        if (!isAllowedAdmin) {
+          window.location.replace('/access-denied');
+        }
+      } catch (e) {
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- AUTH SHIELD LOADING OVERLAY -->
+  <div id="admin-auth-loading-overlay" style="position: fixed; inset: 0; background: #0f172a; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; font-family: sans-serif; transition: opacity 0.5s ease;">
+    <div style="width: 48px; height: 48px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: #6366f1; border-radius: 50%; animation: admin-spin 1s linear infinite;"></div>
+    <p style="font-weight: 700; color: white; font-size: 15px; margin: 0; letter-spacing: -0.3px;">Checking security credentials...</p>
+    <style>
+      @keyframes admin-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </div>
+
+  <div class="admin-viewport">
+    
+    <!-- ====== LEFT SIDEBAR ====== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-brand" id="brandContainer">
+        <div class="admin-logo-orb" id="brandLogo">
+          <i class="fa-solid fa-table-cells-large text-white" style="width: 16px; height: 16px;"></i>
+        </div>
+        <span class="text-gradient" style="font-weight: 800;">Farelancer</span>
+      </div>
+
+      <!-- Navigation links deck -->
+      <nav class="admin-sidebar-menu" id="sidebarMenu">
+        <div class="admin-menu-item active" id="menu-dashboard" data-target="section-dashboard">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Dashboard</span>
+        </div>
+        <div class="admin-menu-item" id="menu-users" data-target="section-users">
+          <i class="fa-solid fa-users"></i>
+          <span>Users CRM</span>
+        </div>
+        <div class="admin-menu-item" id="menu-freelancers" data-target="section-freelancers">
+          <i class="fa-solid fa-award"></i>
+          <span>Freelancers</span>
+        </div>
+        <div class="admin-menu-item" id="menu-jobs" data-target="section-jobs">
+          <i class="fa-solid fa-briefcase"></i>
+          <span>Jobs Board</span>
+        </div>
+        <div class="admin-menu-item" id="menu-bids" data-target="section-bids">
+          <i class="fa-solid fa-file-invoice"></i>
+          <span>Bids Oversight</span>
+        </div>
+        <div class="admin-menu-item" id="menu-payments" data-target="section-payments">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Payments Escrow</span>
+        </div>
+        <div class="admin-menu-item" id="menu-disputes" data-target="section-disputes">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Reports & Disputes</span>
+          <span class="admin-action-pill" id="badge-disputes-count" style="background: var(--error); color: white; display: none;">0</span>
+        </div>
+        <div class="admin-menu-item" id="menu-tickets" data-target="section-tickets">
+          <i class="fa-solid fa-comments"></i>
+          <span>Support Tickets</span>
+          <span class="admin-action-pill" id="badge-tickets-count" style="background: var(--primary); color: white; display: none;">0</span>
+        </div>
+        <div class="admin-menu-item" id="menu-gigs" data-target="section-gigs">
+          <i class="fa-solid fa-tags"></i>
+          <span>Gigs & Services</span>
+        </div>
+        <div class="admin-menu-item" id="menu-categories" data-target="section-categories">
+          <i class="fa-solid fa-tag"></i>
+          <span>Category Mgmt</span>
+        </div>
+        <div class="admin-menu-item" id="menu-analytics" data-target="section-analytics">
+          <i class="fa-solid fa-chart-column"></i>
+          <span>Analytics</span>
+        </div>
+        <div class="admin-menu-item" id="menu-settings" data-target="section-settings">
+          <i class="fa-solid fa-gear"></i>
+          <span>System Settings</span>
+        </div>
+        <div class="admin-menu-item" id="menu-emails" data-target="section-emails">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Email Campaign</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar footer -->
+      <div class="admin-sidebar-footer" id="sidebarFooter">
+        <div class="admin-sidebar-profile" id="adminSidebarProfile">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white;" id="adminAvatarText">
+            AD
+          </div>
+          <div style="flex: 1; overflow: hidden;" id="adminInfoTextContainer">
+            <h5 style="color: white; font-size: 13px; margin: 0;" id="adminUsername">Administrator</h5>
+            <span style="font-size: 11px; color: #64748b;" id="adminRoleLabel">Platform Operator</span>
+          </div>
+          <button id="btnExitPortal" style="color: #ef4444; padding: 4px;" title="Exit to client app">
+            <i class="fa-solid fa-right-from-bracket" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====== MAIN SECTION CONTENT AREA ====== -->
+    <main class="admin-main" id="adminMain">
+      
+      <!-- Glass top navbar -->
+      <header class="admin-navbar" id="adminHeader">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <!-- Mobile sidebar toggler -->
+          <button class="admin-btn-action" id="btnSidebarToggler" style="display: var(--display-toggler, none);">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          
+          <div class="admin-search-wrapper" id="globalSearchWrapper">
+            <i class="fa-solid fa-magnifying-glass admin-search-icon"></i>
+            <input type="text" class="admin-search-input" id="adminGlobalSearch" placeholder="Search users, jobs, escrows...">
+          </div>
+        </div>
+
+        <div class="admin-nav-actions" id="adminHeaderActions">
+          
+          <!-- Database Seeding Sandbox Tooltip Shortcut -->
+          <button class="btn bg-gradient" id="btnQuickSeed" style="padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: 20px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-database" style="width: 14px; height: 14px;"></i>
+            <span>Seed DB Sandbox</span>
+          </button>
+
+          <!-- Notifications bell -->
+          <div style="position: relative;" id="notificationsWrapper">
+            <button class="admin-btn-action" id="btnNotifications">
+              <i class="fa-solid fa-bell"></i>
+              <span class="admin-badge-pulse" id="alertPulse" style="display: none;"></span>
+            </button>
+            
+            <!-- Real-time dynamic alerts dropdown -->
+            <div class="admin-dropdown-alerts" id="alertsDropdown">
+              <div style="padding: 16px; border-bottom: 1px solid var(--gray-200); font-weight: 700; font-size: 14px; display: flex; justify-content: space-between;" id="alertsDropdownHeader">
+                <span>System Incident Logs</span>
+                <button id="btnClearAlerts" style="font-size: 11px; color: var(--primary); font-weight: 600;">Clear</button>
+              </div>
+              <div id="alertsListContainer" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column;">
+                <div style="padding: 20px; text-align: center; color: var(--gray-600); font-size: 12px;">No technical logs reported.</div>
+              </div>
+            </div>
+          </div>
+
+          <a href="/" class="admin-btn-action" id="btnHomeRedirect" title="Go to Platform Home">
+            <i class="fa-solid fa-house"></i>
+          </a>
+        </div>
+      </header>
+
+      <!-- ====== PAGES WRAPPER CONTROLLER ====== -->
+      <div class="admin-container" id="adminPagesContainer">
+        
+        <!-- SANDBOX SEED SECTOR PROMPT -->
+        <div class="sandbox-hero-callout" id="sandboxSeedingBanner">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(99,102,241,0.12); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+              <i class="fa-solid fa-triangle-exclamation" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 16px; font-weight: 700; margin: 0; color: var(--dark);">Platform Sandbox Seeder</h4>
+              <p style="font-size: 13px; color: var(--gray-600); margin: 0;">Is the database fresh and empty? Populate with 5 beautiful accounts, active jobs, escrows, and disputes instantly!</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary" id="btnBannerSeed" style="white-space: nowrap; border-color: var(--primary); color: var(--primary); padding: 10px 18px;">
+            <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 6px;"></i> One-Click Populate
+          </button>
+        </div>
+
+        <!-- ======================= SECTION 1: DASHBOARD OVERVIEW ======================= -->
+        <section class="admin-page-section active" id="section-dashboard">
+          <div style="margin-bottom: 24px;">
+            <h1 class="text-gradient" style="font-size: 28px; font-weight: 800;">Administration Terminal</h1>
+            <p style="color: var(--gray-600); font-size: 14px;">Audit global operations, process escrows, resolve reported incidents, and moderate job postings.</p>
+          </div>
+
+          <!-- Enterprise 20-Metric Bento Deck -->
+          <div style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 20px;" id="dashboardMetrics">
+            
+            <!-- Category 1: User Accounts CRM Telemetry -->
+            <div>
+              <h4 style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-users-gear" style="font-size: 12px; color: var(--primary);"></i>
+                <span>User Accounts CRM Telemetry</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Registered Users -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Registered Users</span>
+                    <div class="admin-stat-value" id="dash-m-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">System Accounts Registry</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(99,102,241,0.08); color: #6366f1; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-users" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Active Users -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Active Users</span>
+                    <div class="admin-stat-value" id="dash-m-act-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">Non-Banned Users</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(16,185,129,0.08); color: #10b981; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-user-check" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Online Users -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Online Users</span>
+                    <div class="admin-stat-value" id="dash-m-on-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                      <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Active Sessions
+                    </span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(34,197,94,0.08); color: #22c55e; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-globe" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Total Admins -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total System Admins</span>
+                    <div class="admin-stat-value" id="dash-m-adm-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--error); font-weight: 600;">Console Clearance</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(239,68,68,0.08); color: #ef4444; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-user-shield" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 2: Talent & Demand Index -->
+            <div>
+              <h4 style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-circle-nodes" style="font-size: 12px; color: #a855f7;"></i>
+                <span>Talent & Demand Index</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Freelancers -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Freelancers</span>
+                    <div class="admin-stat-value" id="dash-m-free-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--primary); font-weight: 600;">Service Providers</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(168,85,247,0.08); color: #a855f7; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-graduation-cap" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Buyers -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Buyers</span>
+                    <div class="admin-stat-value" id="dash-m-buy-users" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--primary); font-weight: 600;">Employers / Clients</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(168,85,247,0.08); color: #a855f7; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-briefcase" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Gigs -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Freelancer Gigs</span>
+                    <div class="admin-stat-value" id="dash-m-gigs" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--primary); font-weight: 600;">Published Services</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(168,85,247,0.08); color: #a855f7; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-tags" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Proposals -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Job Proposals</span>
+                    <div class="admin-stat-value" id="dash-m-bids" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--primary); font-weight: 600;">Active Bid Submissions</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(168,85,247,0.08); color: #a855f7; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-file-invoice-dollar" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 3: Project & Job Velocity -->
+            <div>
+              <h4 style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-timeline" style="font-size: 12px; color: #10b981;"></i>
+                <span>Project & Job Velocity</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Jobs -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Posted Jobs</span>
+                    <div class="admin-stat-value" id="dash-m-jobs-total" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">Aggregated Requirements</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(16,185,129,0.08); color: #10b981; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-folder-tree" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Active Projects -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Active Projects</span>
+                    <div class="admin-stat-value" id="dash-m-jobs-active" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">Work in Progress</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(16,185,129,0.08); color: #10b981; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-spinner" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Completed Projects -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Completed Projects</span>
+                    <div class="admin-stat-value" id="dash-m-jobs-completed" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">Successfully Delivered</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(16,185,129,0.08); color: #10b981; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Pending Projects -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Pending Projects</span>
+                    <div class="admin-stat-value" id="dash-m-jobs-pending" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 600;">Open for Proposals</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(16,185,129,0.08); color: #10b981; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-hourglass-half" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 4: Platform Treasury & Financials -->
+            <div>
+              <h4 style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-sack-dollar" style="font-size: 12px; color: #f59e0b;"></i>
+                <span>Platform Treasury & Financials</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Wallet Balance -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Wallet Balance</span>
+                    <div class="admin-stat-value" id="dash-m-wallet-balance" style="font-size: 22px; margin-top: 4px;">$0.00</div>
+                    <span style="font-size: 10px; color: var(--warning); font-weight: 600;">Cumulated Balances</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(245,158,11,0.08); color: #f59e0b; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-wallet" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Deposits -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Escrow Deposits</span>
+                    <div class="admin-stat-value" id="dash-m-deposits" style="font-size: 22px; margin-top: 4px;">$0.00</div>
+                    <span style="font-size: 10px; color: var(--warning); font-weight: 600;">Secure Escrow Holds</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(245,158,11,0.08); color: #f59e0b; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-building-columns" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Withdrawals -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Withdrawals</span>
+                    <div class="admin-stat-value" id="dash-m-withdrawals" style="font-size: 22px; margin-top: 4px;">$0.00</div>
+                    <span style="font-size: 10px; color: var(--warning); font-weight: 600;">Cleared to Talent Accounts</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(245,158,11,0.08); color: #f59e0b; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-money-bill-transfer" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Transactions -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Transactions</span>
+                    <div class="admin-stat-value" id="dash-m-transactions" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: var(--warning); font-weight: 600;">Database Ledger Count</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(245,158,11,0.08); color: #f59e0b; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-list-check" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 5: Operating Margins & Queue Logs -->
+            <div>
+              <h4 style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-calculator" style="font-size: 12px; color: #06b6d4;"></i>
+                <span>Operating Margins & Queue Logs</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Total Revenue -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Total Gross Revenue</span>
+                    <div class="admin-stat-value" id="dash-m-revenue" style="font-size: 22px; margin-top: 4px;">$0.00</div>
+                    <span style="font-size: 10px; color: #06b6d4; font-weight: 600;">Overall Volume Flow</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(6,182,212,0.08); color: #06b6d4; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-chart-line" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Platform Commission -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Platform Commission</span>
+                    <div class="admin-stat-value" id="dash-m-commission" style="font-size: 22px; margin-top: 4px;">$0.00</div>
+                    <span style="font-size: 10px; color: #06b6d4; font-weight: 700;">Net Operator Profit</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(6,182,212,0.08); color: #06b6d4; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-percent" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Pending KYC Requests -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Pending KYC Requests</span>
+                    <div class="admin-stat-value" id="dash-m-kyc" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: #ef4444; font-weight: 700;">Requires Verification</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(239,68,68,0.08); color: #ef4444; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-id-card-clip" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+                <!-- Pending Withdrawal Requests -->
+                <div class="admin-stat-card" style="padding: 16px; min-height: 100px;">
+                  <div>
+                    <span class="admin-stat-label" style="font-size: 11px;">Pending Withdrawals</span>
+                    <div class="admin-stat-value" id="dash-m-withdrawal-reqs" style="font-size: 22px; margin-top: 4px;">0</div>
+                    <span style="font-size: 10px; color: #ef4444; font-weight: 700;">Awaiting Clearance</span>
+                  </div>
+                  <div class="admin-stat-icon-box" style="background: rgba(239,68,68,0.08); color: #ef4444; width: 40px; height: 40px; border-radius: 8px;">
+                    <i class="fa-solid fa-receipt" style="font-size: 14px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mid Dashboard Grid layout -->
+          <div class="admin-charts-grid" id="dashboardMidLayout">
+            <!-- Left Side Interactive Charts Mockup -->
+            <div class="card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Platform Financial Payout Stream</h3>
+                <span class="admin-badge admin-badge-active">REALTIME UPDATES</span>
+              </div>
+              <div style="height: 300px; position: relative;">
+                <!-- Real chart renderer block -->
+                <canvas id="chartDashboardRevenue"></canvas>
+              </div>
+            </div>
+
+            <!-- Right side Activity lists -->
+            <div class="card" style="padding: 24px; display: flex; flex-direction: column;">
+              <div style="margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Recent Signups Log</h3>
+                <span style="font-size: 11px; color: var(--gray-600);">Newest registered users</span>
+              </div>
+              
+              <div id="dash-recent-users-list" style="display: flex; flex-direction: column; gap: 12px; flex: 1; overflow-y: auto;">
+                <div style="text-align: center; color: var(--gray-600); font-size: 12px; padding: 40px 0;">No active users logged. Let's seed DB sandbox!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row lists -->
+          <div class="card" style="margin-top: 24px; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Latest Jobs Submissions</h3>
+                <span style="font-size: 11px; color: var(--gray-600);">Recent platform requirements requiring bids</span>
+              </div>
+              <button class="btn btn-secondary" id="btnDashToJobs" style="padding: 6px 12px; font-size: 12px;">Moderate All</button>
+            </div>
+            
+            <div class="admin-table-container">
+              <table class="admin-elegant-table" id="dashboardJobsTable">
+                <thead>
+                  <tr>
+                    <th>Job Title</th>
+                    <th>Category</th>
+                    <th>Budget</th>
+                    <th>Posted By</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-jobs-table">
+                  <tr>
+                    <td colspan="5" style="text-align: center; color: var(--gray-600); padding: 30px;">No public jobs currently submitted.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 2: USERS CRM MODULE ======================= -->
+        <section class="admin-page-section" id="section-users">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Users Account CRM</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Modify balances, assign roles, ban/unban profiles, or permanently delete records.</p>
+              </div>
+              
+              <button class="btn bg-gradient" id="btnCreateUser" style="padding: 10px 18px; font-size: 13px; font-weight: 700;">
+                <i class="fa-solid fa-user-plus" style="margin-right: 6px;"></i> Register New Account
+              </button>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>User Details</th>
+                    <th>Role</th>
+                    <th>Start Balance</th>
+                    <th>Rating</th>
+                    <th>Status</th>
+                    <th>Registered At</th>
+                    <th style="text-align: right;">Operations actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tblUsersBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray-600); padding: 40px;">No platform users queried.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 3: FREELANCERS DIRECTORY ======================= -->
+        <section class="admin-page-section" id="section-freelancers">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Freelancers Directory</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Audit freelancers services catalogs, custom titles, star ratings, and hourly wages.</p>
+              </div>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Freelancer Name</th>
+                    <th>Professional Title & Skills</th>
+                    <th>Hourly Pay Rate</th>
+                    <th>Average Rating</th>
+                    <th>Completed Gigs</th>
+                    <th>Joined Since</th>
+                  </tr>
+                </thead>
+                <tbody id="tblFreelancersBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--gray-600); padding: 40px;">No freelancer accounts queried.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 4: JOBS BOARD MODERATION ======================= -->
+        <section class="admin-page-section" id="section-jobs">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Platform Jobs Board Moderation</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Audit open projects files, adjust budgets, cancel scam listings, or force close dispute contracts.</p>
+              </div>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Job Title</th>
+                    <th>Project Client</th>
+                    <th>Hired Freelancer</th>
+                    <th>Escrow budget</th>
+                    <th>State Status</th>
+                    <th>Deadline Target</th>
+                    <th style="text-align: right;">Moderation actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tblJobsBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray-600); padding: 40px;">No jobs board listings currently processed.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 5: BIDS OVERSIGHT ======================= -->
+        <section class="admin-page-section" id="section-bids">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Active Bids & Proposals Oversight</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Audit all bids, delivery times, proposals descriptions, and bid statuses in real-time.</p>
+              </div>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Target Job Listing</th>
+                    <th>Bidding Freelancer</th>
+                    <th>Bid Amount</th>
+                    <th>Delivery Estimate</th>
+                    <th>Proposal Pitch Description</th>
+                    <th>State Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tblBidsBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--gray-600); padding: 40px;">No active bids catalogued.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 6: PAYMENTS & ESCROWS ======================= -->
+        <section class="admin-page-section" id="section-payments">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Platform Escrow Payments Clearing Desk</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Audit legal contract escrows, view transaction invoices, or force release locked funds into freelancer bags.</p>
+              </div>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Transaction / Job ID</th>
+                    <th>Secure Escrow Amount</th>
+                    <th>Client (Payer)</th>
+                    <th>Freelancer (Receiver)</th>
+                    <th>Payment State</th>
+                    <th>Dispatched Date</th>
+                    <th style="text-align: right;">Clearing Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="tblPaymentsBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray-600); padding: 40px;">No transaction logs filed.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 7: REPORTS & DISPUTES SYSTEM ======================= -->
+        <section class="admin-page-section" id="section-disputes">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <div>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0;">Community Disputes & Incident Reports Center</h2>
+                <p style="color: var(--gray-600); font-size: 13px; margin: 0;">Investigate scams, resolve billing milestones, and respond to freelancer / buyer terms infringement violations.</p>
+              </div>
+               <button class="btn bg-gradient" id="btnLaunchReportModal" style="padding: 10px 18px; font-size: 13px; font-weight: 700;">
+                <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> File New Incident
+              </button>
+            </div>
+
+            <div class="admin-table-container">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Incident Reason</th>
+                    <th>Description Summary</th>
+                    <th>Associated Job Contract</th>
+                    <th>Rival Accused parties</th>
+                    <th>Resolution Stage</th>
+                    <th>Filed On</th>
+                    <th style="text-align: right;">Review Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="tblDisputesBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray-600); padding: 40px;">No dispute incidents filed. Let's seed DB sandbox!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 8: MESSAGES & HELP TICKETS ======================= -->
+        <section class="admin-page-section" id="section-tickets">
+          <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Ticketing Customer Care Suite</h1>
+              <p style="color: var(--gray-600); font-size: 14px;">Audit support tickets catalog, chat live with platform members, and resolve structural account bugs.</p>
+            </div>
+            <button class="btn bg-gradient" id="btnLaunchTicketModal" style="padding: 10px 18px; font-size: 13px; font-weight: 700;">
+              <i class="fa-solid fa-plus" style="margin-right: 6px;"></i> File Demo Ticket
+            </button>
+          </div>
+
+          <div class="support-center-layout" id="ticketLayout">
+            <!-- Left Side Active Tickets Grid -->
+            <div class="support-tickets-list" id="ticketsSidebar">
+              <div style="padding: 16px; border-bottom: 1px solid var(--gray-200); font-weight: 700; background: white;" id="ticketSidebarHeader">
+                active tickets list
+              </div>
+              <div id="ticketScrollList" style="flex: 1; overflow-y: auto;">
+                <!-- Filled dynamically -->
+                <div style="padding: 30px; text-align: center; color: var(--gray-600); font-size: 12px;">No active support tickets.</div>
+              </div>
+            </div>
+
+            <!-- Right Side Live Support Chat Board -->
+            <div class="support-chat-wrapper" id="supportChatSpace">
+              <!-- Header -->
+              <div class="support-chat-header" id="currentChatMetadataHeader">
+                <div>
+                  <h4 style="margin: 0; font-size: 15px;" id="lblSelectedTicketSubject">Acquire a ticket from the left deck</h4>
+                  <span style="font-size: 11px; color: var(--gray-600);" id="lblSelectedTicketAuthor">No ticket selected</span>
+                </div>
+                <div style="display: flex; gap: 8px;" id="chatHeaderActionGroup">
+                  <button class="btn btn-secondary" style="display: none; padding: 4px 10px; font-size: 12px;" id="btnToggleTicketStatus">Close Ticket</button>
+                </div>
+              </div>
+
+              <!-- Message Bubbles -->
+              <div class="support-chat-body" id="chatBubbleBox">
+                <div style="margin: auto; text-align: center; color: var(--gray-600);" id="chatDefaultPrompt">
+                  <i class="fa-solid fa-comments" style="font-size: 48px; color: var(--gray-300); margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;"></i>
+                  <span>Select an incoming support ticket layout to begin responding to users instantly.</span>
+                </div>
+              </div>
+
+              <!-- Chat Input Footer -->
+              <div class="support-chat-footer" id="chatInputArea" style="display: none;">
+                <input type="text" class="admin-form-control" id="txtAdminReplySource" placeholder="Type your administrator support message reply..." style="flex: 1;">
+                <button class="btn bg-gradient" id="btnSendAdminReply" style="padding: 10px 20px; font-size: 13px; font-weight: 700;">Dispatch Reply</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 9: ANALYTICS BOARDS ======================= -->
+        <section class="admin-page-section" id="section-analytics">
+          <div style="margin-bottom: 24px;">
+            <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Platform Enterprise Analytics</h1>
+            <p style="color: var(--gray-600); font-size: 14px;">Audit jobs board expansion velocity, revenue indexes, commission trends, and active freelancers counts.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px;">
+            <div class="card" style="padding: 24px;">
+              <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Platform Job Categories Demographics</h3>
+              <div style="height: 250px; position: relative;">
+                <canvas id="chartAnalyticsCategories"></canvas>
+              </div>
+            </div>
+
+            <div class="card" style="padding: 24px;">
+              <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">User Growth Engagement Metrics</h3>
+              <div style="height: 250px; position: relative;">
+                <canvas id="chartAnalyticsUsers"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 24px;">
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Revenue, Volume & Commission Escrows Ledger ($ USD)</h3>
+            <div style="height: 300px; position: relative;">
+              <canvas id="chartAnalyticsFinancials"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 10: PLATFORM SYSTEM SETTINGS ======================= -->
+        <section class="admin-page-section" id="section-settings">
+          <div style="margin-bottom: 24px;">
+            <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Control Settings Console</h1>
+            <p style="color: var(--gray-600); font-size: 14px;">Configure database, commissions fees, site branding titles, backup timelines, and SMTP servers.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.22fr 0.78fr; gap: 30px;">
+            <!-- Left Config Cards -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">General Branding Details</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="admin-form-group">
+                    <label for="cfg_siteName">Platform Site Title Name</label>
+                    <input type="text" class="admin-form-control" id="cfg_siteName" value="Farelancer Platform">
+                  </div>
+                  <div class="admin-form-group">
+                    <label for="cfg_commissionPct">System Escrow Commission Fee (%)</label>
+                    <input type="number" class="admin-form-control" id="cfg_commissionPct" value="5">
+                  </div>
+                </div>
+
+                <div class="admin-form-group">
+                  <label for="cfg_supportEmail">Help Center Sender/SMTP Email address</label>
+                  <input type="email" class="admin-form-control" id="cfg_supportEmail" value="support@farelanceru.com">
+                </div>
+              </div>
+
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Stripe Gateway & Payment Integrations</h3>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <div>
+                    <h5 style="margin: 0; font-size: 14px;">Sandbox Mode Payments Enable</h5>
+                    <p style="font-size: 11px; color: var(--gray-600); margin: 0;">Perform demo escrow settlements without charging cards.</p>
+                  </div>
+                  <div style="display: flex; align-items: center;">
+                    <input type="checkbox" id="cfg_sandboxMode" style="width: 18px; height: 18px; accent-color: var(--primary);" checked>
+                  </div>
+                </div>
+
+                <div class="admin-form-group">
+                  <label for="cfg_stripeKey">Frictionless Public Secret Token</label>
+                  <input type="password" class="admin-form-control" id="cfg_stripeKey" value="••••••••••••••••••••••••••••••••••••">
+                </div>
+              </div>
+
+              <!-- SMTP Server Credentials Card -->
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">SMTP Transactional Mail Server</h3>
+                
+                <div style="display: grid; grid-template-columns: 1.5fr 0.5fr; gap: 16px; margin-bottom: 12px;">
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_smtpHost">SMTP Server Hostname</label>
+                    <input type="text" class="admin-form-control" id="cfg_smtpHost" placeholder="smtp.gmail.com">
+                  </div>
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_smtpPort">Server Port</label>
+                    <input type="number" class="admin-form-control" id="cfg_smtpPort" placeholder="465">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_smtpUser">SMTP Authentications User</label>
+                    <input type="text" class="admin-form-control" id="cfg_smtpUser" placeholder="admin@farelanceru.com">
+                  </div>
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_smtpPass">SMTP Access Key/Password</label>
+                    <input type="password" class="admin-form-control" id="cfg_smtpPass" placeholder="••••••••••••••••">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social OAuth Keys Configuration Card -->
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Federated OAuth Client Credentials</h3>
+                
+                <div style="margin-bottom: 16px;">
+                  <h5 style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; color: var(--gray-700);">Google Sign-In App Integrations</h5>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="admin-form-group" style="margin: 0;">
+                      <label for="cfg_googleClientId">Google Client ID</label>
+                      <input type="text" class="admin-form-control" id="cfg_googleClientId" placeholder="client-id.apps.googleusercontent.com">
+                    </div>
+                    <div class="admin-form-group" style="margin: 0;">
+                      <label for="cfg_googleClientSecret">Google Client Secret</label>
+                      <input type="password" class="admin-form-control" id="cfg_googleClientSecret" placeholder="••••••••••••••••">
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h5 style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; color: var(--gray-700);">Facebook Sign-In App Integrations</h5>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="admin-form-group" style="margin: 0;">
+                      <label for="cfg_facebookAppId">Facebook App ID</label>
+                      <input type="text" class="admin-form-control" id="cfg_facebookAppId" placeholder="123456789012345">
+                    </div>
+                    <div class="admin-form-group" style="margin: 0;">
+                      <label for="cfg_facebookAppSecret">Facebook App Secret</label>
+                      <input type="password" class="admin-form-control" id="cfg_facebookAppSecret" placeholder="••••••••••••••••">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Infrastructure Settings Card -->
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Infrastructure & Redis Caching</h3>
+                
+                <div style="display: grid; grid-template-columns: 1.5fr 0.5fr; gap: 16px; margin-bottom: 16px;">
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_redisHost">Redis Server Endpoint</label>
+                    <input type="text" class="admin-form-control" id="cfg_redisHost" placeholder="127.0.0.1">
+                  </div>
+                  <div class="admin-form-group" style="margin: 0;">
+                    <label for="cfg_redisPort">Cache Port</label>
+                    <input type="number" class="admin-form-control" id="cfg_redisPort" placeholder="6379">
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <h5 style="margin: 0; font-size: 14px;">Platform Maintenance Mode</h5>
+                    <p style="font-size: 11px; color: var(--gray-600); margin: 0;">Restricts non-admin user traffic. Server will display status page.</p>
+                  </div>
+                  <div style="display: flex; align-items: center;">
+                    <input type="checkbox" id="cfg_maintenanceMode" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Config controls -->
+            <div class="card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; height: fit-content;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Admin Security Level</h3>
+                
+                <p style="font-size: 13px; color: var(--gray-700); line-height: 1.5; margin-bottom: 16px;">
+                  We persist administrative alterations inside the system. Ensure commission adjustments keep the balance sheet aligned.
+                </p>
+
+                <div class="admin-form-group" style="margin-bottom: 24px;">
+                  <label for="cfg_auditMode">Platform Audit Scope</label>
+                  <select class="admin-form-control" id="cfg_auditMode">
+                    <option value="permissive">Permissive Sandbox Mode</option>
+                    <option value="strict">Strict Audit Enforcement</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn bg-gradient" id="btnSaveConfig" style="padding: 12px; font-size: 13px; font-weight: 700; width: 100%;">
+                <i class="fa-solid fa-floppy-disk" style="margin-right: 6px;"></i> Persist Configuration
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 11: GIGS / SERVICES MANAGEMENT ======================= -->
+        <section class="admin-page-section" id="section-gigs">
+          <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Gigs & Services Catalog</h1>
+              <p style="color: var(--gray-600); font-size: 14px;">Review, edit, feature, hide, or moderate listed freelancer service offerings.</p>
+            </div>
+            <!-- Dynamic Category and Status Filters -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <input type="text" class="admin-form-control" id="adminGigsSearch" placeholder="Search gigs..." style="max-width: 200px; padding: 8px 12px; font-size: 13px;">
+              <select class="admin-form-control" id="adminGigsCategoryFilter" style="max-width: 160px; padding: 8px 12px; font-size: 13px;">
+                <option value="All">All Categories</option>
+                <option value="Development & IT">Development & IT</option>
+                <option value="Design">Design</option>
+                <option value="Writing">Writing</option>
+                <option value="Marketing">Marketing</option>
+                <option value="AI Services">AI Services</option>
+                <option value="Video Editing">Video Editing</option>
+              </select>
+              <select class="admin-form-control" id="adminGigsStatusFilter" style="max-width: 140px; padding: 8px 12px; font-size: 13px;">
+                <option value="All">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="hidden">Hidden</option>
+                <option value="reported">Reported</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 12px;">
+            <div style="overflow-x: auto;">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th>Gig / Service</th>
+                    <th>Freelancer</th>
+                    <th>Category</th>
+                    <th>Cost</th>
+                    <th>Sales</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="tblGigsBody">
+                  <!-- Injected via JavaScript -->
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray-600); padding: 40px;">Loading gigs data...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION 12: CATEGORY MANAGEMENT ======================= -->
+        <section class="admin-page-section" id="section-categories">
+          <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Primary Category Management</h1>
+              <p style="color: var(--gray-600); font-size: 14px;">Configure and design dynamic platform business categories for gigs, jobs, and freelancer profiles.</p>
+            </div>
+            <button class="btn bg-gradient" id="btnCreateCategory" style="padding: 10px 18px; font-weight: 700;">
+              <i class="fa-solid fa-plus" style="margin-right: 6px; width: 15px; height: 15px;"></i> Create Category
+            </button>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 12px;">
+            <div style="overflow-x: auto;">
+              <table class="admin-elegant-table">
+                <thead>
+                  <tr>
+                    <th style="width: 220px;">Category Name</th>
+                    <th>Lucide Icon Key</th>
+                    <th>Short Description</th>
+                    <th>Created At</th>
+                    <th style="text-align: right;">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="tblCategoriesBody">
+                  <!-- Injected via JavaScript -->
+                  <tr>
+                    <td colspan="5" style="text-align: center; color: var(--gray-600); padding: 40px;">Loading categories catalog...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================= SECTION: EMAIL CAMPAIGN & BROADCASTS ======================= -->
+        <section class="admin-page-section" id="section-emails">
+          <div style="margin-bottom: 24px;">
+            <h1 class="text-gradient" style="font-size: 26px; font-weight: 800;">Enterprise Email Campaign Manager</h1>
+            <p style="color: var(--gray-600); font-size: 14px;">Deploy professional HTML notifications, security alerts, and system-wide newsletters to target user groups using a live SMTP transaction route.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px;">
+            <!-- Left Side Campaign Composer -->
+            <div class="card" style="padding: 24px;">
+              <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Mail Dispatcher Composer</h3>
+              
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="email_target" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark);">Campaign Recipient Target Group</label>
+                <select class="admin-form-control" id="email_target" style="padding: 10px; width: 100%; border: 1px solid var(--gray-300); border-radius: 6px;">
+                  <option value="all">All Registered Users (Broadcast)</option>
+                  <option value="freelancers">All Active Freelancers Only</option>
+                  <option value="buyers">All Buyers/Employers Only</option>
+                  <option value="verified">KYC Verified Users Only</option>
+                  <option value="blocked">Blocked/Suspended Users Only</option>
+                  <option value="selected">Selected Recipient Emails (Comma separated)</option>
+                </select>
+              </div>
+
+              <!-- Extra emails input (shown if selected) -->
+              <div class="admin-form-group" id="group_email_individual" style="display: none; margin-bottom: 16px;">
+                <label for="email_individual_list" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark);">Individual Recipient Email List</label>
+                <input type="text" class="admin-form-control" id="email_individual_list" placeholder="e.g. buyer@gmail.com, free@gmail.com" style="width: 100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+                <p style="font-size: 11px; color: var(--gray-600); margin-top: 4px;">Separate multiple recipient addresses using commas.</p>
+              </div>
+
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="email_subject" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark);">Subject Line</label>
+                <input type="text" class="admin-form-control" id="email_subject" placeholder="Important Updates Regarding Your Farelancer Account" style="width: 100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;">
+              </div>
+
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="email_template_selector" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark);">Select Newsletter Template Style</label>
+                <select class="admin-form-control" id="email_template_selector" style="padding: 10px; width: 100%; border: 1px solid var(--gray-300); border-radius: 6px;">
+                  <option value="general">Standard Announcement Layout</option>
+                  <option value="security">High Importance Security Alert (Warning)</option>
+                  <option value="welcome">Aesthetic Welcome Greeting</option>
+                  <option value="marketing">Promo Gigs Campaign Showcase</option>
+                </select>
+              </div>
+
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="email_body" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark);">Rich Announcement Message Body</label>
+                <textarea class="admin-form-control" id="email_body" rows="8" placeholder="Type your email content here..." style="font-family: 'Inter', sans-serif; resize: vertical; line-height: 1.6; width: 100%; padding: 10px; border: 1px solid var(--gray-300); border-radius: 6px;"></textarea>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button class="btn btn-secondary" id="btnPreviewEmail" style="padding: 12px 20px;">
+                  <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> Live Preview
+                </button>
+                <button class="btn bg-gradient" id="btnDispatchEmail" style="padding: 12px 24px; font-weight: 700;">
+                  <i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Send Campaign
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Side Live Preview Panel -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              <div class="card" style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Real-Time Dispatch Preview</h3>
+                
+                <div style="background: #f8fafc; border: 1px solid var(--gray-300); border-radius: 8px; padding: 20px; flex: 1; overflow-y: auto; font-family: sans-serif; max-height: 480px;" id="email_live_preview_pane">
+                  <div style="font-family: 'Inter', sans-serif; max-width: 100%; margin: 0 auto; background: white; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="text-align: center; margin-bottom: 15px;" id="preview_header_logo_area">
+                      <h2 style="color: #4f46e5; margin: 0; font-size: 20px;">Farelancer</h2>
+                      <p style="color: #64748b; font-size: 12px; margin: 2px 0 0 0;" id="preview_header_type">Official Announcement</p>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 15px;" />
+                    <div style="color: #334155; font-size: 13px; line-height: 1.5; white-space: pre-line;" id="preview_body_text">
+                      Type message body in the composer panel to preview output styling instantly.
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 15px; margin-bottom: 10px;" />
+                    <p style="font-size: 10px; color: #94a3b8; text-align: center; margin: 0;">
+                      You are receiving this communication from Farelancer Admin. Please do not reply directly to this mail.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campaign Logs/Stats card -->
+              <div class="card" style="padding: 20px;">
+                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Active SMTP Configuration</h4>
+                <div style="font-size: 12px; color: var(--gray-700); line-height: 1.6;">
+                  <div><span style="font-weight: 600; color: var(--dark);">Service:</span> Standard Node Transporter</div>
+                  <div><span style="font-weight: 600; color: var(--dark);">Channel:</span> TLS/SSL Secure Auth</div>
+                  <div><span style="font-weight: 600; color: var(--dark);">Queue status:</span> <span style="color: var(--success); font-weight: 700;">● IDLE (READY)</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+
+  <!-- ====== MODAL 1: CREATE USER MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalCreateUser">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">Register New Sandbox User</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeCreateUserX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <div class="admin-form-group">
+          <label for="m_user_name">Display Username</label>
+          <input type="text" class="admin-form-control" id="m_user_name" placeholder="ExpertCoder">
+        </div>
+        <div class="admin-form-group">
+          <label for="m_user_email">Email address</label>
+          <input type="email" class="admin-form-control" id="m_user_email" placeholder="coder@farelanceru.com">
+        </div>
+        <div class="admin-form-group">
+          <label for="m_user_password">Secure Password</label>
+          <input type="password" class="admin-form-control" id="m_user_password" placeholder="••••••••">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="m_user_role">Platform Role</label>
+            <select class="admin-form-control" id="m_user_role">
+              <option value="freelancer">Freelancer</option>
+              <option value="buyer">Buyer / Employer</option>
+              <option value="admin">Platform Admin</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="m_user_bal">Starting Sandbox Wallet Balance ($)</label>
+            <input type="number" class="admin-form-control" id="m_user_bal" value="1000">
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelCreateUser">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitCreateUser">Register Account</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 2: EDIT USER MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalEditUser">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">Edit Account Registry Details</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeEditUserX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <input type="hidden" id="edit_user_id">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_user_name">Display Username</label>
+            <input type="text" class="admin-form-control" id="edit_user_name">
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_user_email">Email address</label>
+            <input type="email" class="admin-form-control" id="edit_user_email">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_user_role">Platform Role</label>
+            <select class="admin-form-control" id="edit_user_role">
+              <option value="freelancer">Freelancer</option>
+              <option value="buyer">Buyer / Employer</option>
+              <option value="admin">Platform Admin</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_user_bal">Sandbox Wallet Balance ($)</label>
+            <input type="number" class="admin-form-control" id="edit_user_bal">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_user_status">Registry Status</label>
+            <select class="admin-form-control" id="edit_user_status">
+              <option value="active">Active Status</option>
+              <option value="banned">Banned Status</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_user_rate">Base Rating (1 - 5)</label>
+            <input type="number" class="admin-form-control" id="edit_user_rate" min="1" max="5" step="0.1">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_user_kyc">KYC / Identity Verification Status</label>
+            <select class="admin-form-control" id="edit_user_kyc">
+              <option value="unsubmitted">Unsubmitted</option>
+              <option value="pending">Pending Audit</option>
+              <option value="verified">Verified Pro Account</option>
+              <option value="rejected">Rejected / Incomplete</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_user_badges">Assigned Badges (Comma Separated)</label>
+            <input type="text" class="admin-form-control" id="edit_user_badges" placeholder="e.g. Top Rated, Expert Coder">
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelEditUser">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitEditUser">Persist Details</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 3: VIEW / EDIT JOB DETAILS ====== -->
+  <div class="admin-modal-overlay" id="modalEditJob">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">Edit Plateform Job Details</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeEditJobX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <input type="hidden" id="edit_job_id">
+        
+        <div class="admin-form-group">
+          <label for="edit_job_title">Project Posting Title</label>
+          <input type="text" class="admin-form-control" id="edit_job_title">
+        </div>
+
+        <div class="admin-form-group">
+          <label for="edit_job_description">Description details</label>
+          <textarea class="admin-form-control" id="edit_job_description" rows="4" style="resize: vertical;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_job_category">Select Category</label>
+            <select class="admin-form-control" id="edit_job_category">
+              <option value="Development & IT">Development & IT</option>
+              <option value="Design">Visual Design</option>
+              <option value="Writing">SEO Copywriting</option>
+              <option value="Marketing">Growth Marketing</option>
+              <option value="Business">Business consulting</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_job_budget">Escrow budget ($)</label>
+            <input type="number" class="admin-form-control" id="edit_job_budget">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_job_status">Job State Standard</label>
+            <select class="admin-form-control" id="edit_job_status">
+              <option value="open">Open (Bidding phase)</option>
+              <option value="active">Active (Contract Processing)</option>
+              <option value="completed">Completed Status</option>
+              <option value="cancelled">Cancelled Status</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_job_deadline">Deadline Calendar Target</label>
+            <input type="date" class="admin-form-control" id="edit_job_deadline">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label for="edit_job_skills">Required Skills tags (comma separated)</label>
+          <input type="text" class="admin-form-control" id="edit_job_skills">
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelEditJob">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitEditJob">Persist Details</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 4: GENERIC DETAIL INVOICE DIALOG ====== -->
+  <div class="admin-modal-overlay" id="modalGeneralDetails">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title" id="lblDetailModalTitle">Audit Details Panel</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeGeneralX">&times;</button>
+      </div>
+      <div class="admin-modal-body" id="divDetailModalBox" style="font-size: 14px; line-height: 1.6;">
+        <!-- Hydrated dynamically -->
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnDismissDetails">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 5: LAUNCH INCIDENT/REPORT MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalLaunchReport">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">File Sandbox Conflict Incident</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeLaunchReportX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <div class="admin-form-group">
+          <label for="m_rep_reason">Incident classification / Reason</label>
+          <select class="admin-form-control" id="m_rep_reason">
+            <option value="Unresponsive communication">Unresponsive communication</option>
+            <option value="Delayed milestone escrow release">Delayed milestone escrow release</option>
+            <option value="Deliverables description mismatch">Deliverables description mismatch</option>
+            <option value="Payment scam behavior">Scam behavior or terms infraction</option>
+          </select>
+        </div>
+        <div class="admin-form-group">
+          <label for="m_rep_desc">Incident full details description</label>
+          <textarea class="admin-form-control" id="m_rep_desc" rows="4" placeholder="Detail the accused party acts and project states..."></textarea>
+        </div>
+        <div class="admin-form-group">
+          <label for="m_rep_job">Target Job contract (optional ID)</label>
+          <input type="text" class="admin-form-control" id="m_rep_job" placeholder="Leave blank or paste Job ID">
+        </div>
+        <div class="admin-form-group">
+          <label for="m_rep_reported">Accused User profile (optional ID)</label>
+          <input type="text" class="admin-form-control" id="m_rep_reported" placeholder="Leave blank or paste User ID">
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelLaunchReport">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitLaunchReport">Launch Incident</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 6: CREATE DEMO TICKET MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalLaunchTicket">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">Create Demonstration Help Ticket</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeLaunchTicketX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <div class="admin-form-group">
+          <label for="m_tix_subject">Ticket Subject Inquiry</label>
+          <input type="text" class="admin-form-control" id="m_tix_subject" placeholder="Stripe merchant balance withdrawal error">
+        </div>
+        <div class="admin-form-group">
+          <label for="m_tix_message">Initial support message description</label>
+          <textarea class="admin-form-control" id="m_tix_message" rows="4" placeholder="Type the inquiry description..."></textarea>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelLaunchTicket">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitLaunchTicket">Dispatch Inquiry</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 7: EDIT GIG / SERVICE MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalEditGig">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title">Edit Gig & Service Specification</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeEditGigX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <input type="hidden" id="edit_gig_id">
+        
+        <div class="admin-form-group">
+          <label for="edit_gig_title">Gig Offer Title</label>
+          <input type="text" class="admin-form-control" id="edit_gig_title" placeholder="Gig title...">
+        </div>
+
+        <div class="admin-form-group">
+          <label for="edit_gig_description">Detailed Service Description</label>
+          <textarea class="admin-form-control" id="edit_gig_description" rows="4" style="resize: vertical;" placeholder="Service description..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_gig_category">Service Category</label>
+            <select class="admin-form-control" id="edit_gig_category">
+              <option value="Development & IT">Development & IT</option>
+              <option value="Design">Design</option>
+              <option value="Writing">Writing</option>
+              <option value="Marketing">Marketing</option>
+              <option value="AI Services">AI Services</option>
+              <option value="Video Editing">Video Editing</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_gig_price">Starting Price ($)</label>
+            <input type="number" class="admin-form-control" id="edit_gig_price">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_gig_delivery">Delivery Target (Days)</label>
+            <input type="number" class="admin-form-control" id="edit_gig_delivery">
+          </div>
+          <div class="admin-form-group">
+            <label for="edit_gig_tags">Search tags (comma-separated)</label>
+            <input type="text" class="admin-form-control" id="edit_gig_tags" placeholder="react, tailwind, node">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label for="edit_gig_status">Moderation Listing Status</label>
+            <select class="admin-form-control" id="edit_gig_status">
+              <option value="active">Active (Visible)</option>
+              <option value="hidden">Hidden by Admin</option>
+              <option value="reported">Reported / Restricted</option>
+            </select>
+          </div>
+          <div class="admin-form-group" style="display: flex; align-items: center; justify-content: space-between; padding-top: 24px;">
+            <label for="edit_gig_featured" style="margin: 0; font-size: 13px;">Feature Gig on Home</label>
+            <input type="checkbox" id="edit_gig_featured" style="width: 20px; height: 20px; accent-color: var(--primary);">
+          </div>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelEditGig">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitEditGig">Save Gig Listing</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ====== MODAL 8: CREATE / EDIT CATEGORY MODAL ====== -->
+  <div class="admin-modal-overlay" id="modalCategory">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h4 class="admin-modal-title" id="lblCategoryModalTitle">Configure Category</h4>
+        <button style="font-size: 20px; color: var(--gray-600);" class="btn-close-modal" id="closeCategoryModalX">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <input type="hidden" id="edit_cat_id">
+        
+        <div class="admin-form-group">
+          <label for="edit_cat_name">Category Title Name</label>
+          <input type="text" class="admin-form-control" id="edit_cat_name" placeholder="E.g., Graphics & Design">
+        </div>
+
+        <div class="admin-form-group">
+          <label for="edit_cat_icon">Font Awesome Icon Class</label>
+          <input type="text" class="admin-form-control" id="edit_cat_icon" placeholder="E.g., fa-solid fa-palette, fa-solid fa-code">
+        </div>
+
+        <div class="admin-form-group">
+          <label for="edit_cat_description">Tagline / Short description</label>
+          <textarea class="admin-form-control" id="edit_cat_description" rows="3" placeholder="Identify the domain boundaries..."></textarea>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-secondary btn-close-modal" id="btnCancelEditCat">Close</button>
+        <button class="btn bg-gradient" id="btnSubmitCategory">Save Category</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/admin.js"></script>
+  <script>
+    // Create vector icons dynamically
+    setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 800);
+  </script>
+</body>
+</html>

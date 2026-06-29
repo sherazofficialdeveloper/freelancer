@@ -1,0 +1,573 @@
+/* ==============================================================================
+ * FARELANCERU MASTER RESPONSIVE STYLESHEET
+ * Optimized for flawless display from 320px mobile up to 4K Ultra-Wide Monitors
+ * Resolves all horizontal overflows, layout shifts, clipped content, and visual bugs
+ * ==============================================================================
+ */
+
+/* 1. GLOBAL ANTI-OVERFLOW & WORD-WRAP ENFORCEMENT */
+
+html, body {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Enforce safe breaking of long strings or titles */
+h1, h2, h3, h4, h5, h6, p, span, a, li, button, select, option, td, th, div {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: normal !important;
+}
+
+/* Section Title Class to replace fragile inline styles */
+.section-title {
+  font-size: 34px !important;
+  letter-spacing: -0.5px !important;
+  margin-top: 8px !important;
+  line-height: 1.25 !important;
+  font-weight: 800 !important;
+}
+
+/* Ensure images, video, and canvases never overflow */
+img, video, canvas, svg, iframe {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Safe table responsive scroll wraps */
+.table-responsive {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-bottom: 1.5rem;
+}
+
+
+/* 2. BIG DESKTOP & ULTRA-WIDE RESOLUTIONS COMFORT */
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1400px !important;
+  }
+  .hero-content h1 {
+    font-size: 64px !important;
+  }
+}
+
+@media (min-width: 2560px) {
+  .container {
+    max-width: 2000px !important;
+  }
+  .hero-content h1 {
+    font-size: 76px !important;
+  }
+  .hero-content p {
+    font-size: 24px !important;
+    max-width: 800px !important;
+  }
+}
+
+
+/* 3. SMALLER DESKTOPS & LAPTOPS SAFEGUARD */
+
+@media (max-width: 1280px) {
+  .hero-grid {
+    gap: 30px !important;
+  }
+  /* Constrain second card offset translation to avoid pushing body scroll space */
+  .hero-side-card:nth-child(2) {
+    transform: rotate(2deg) translateX(15px) !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hero-content h1 {
+    font-size: 44px !important;
+    letter-spacing: -1.2px !important;
+  }
+  .hero-content p {
+    font-size: 16px !important;
+    margin-bottom: 24px;
+    max-width: 100%;
+  }
+  /* Anchor side cards safely under container bounds */
+  .hero-side-card:nth-child(2) {
+    transform: rotate(1deg) translateX(0) !important;
+  }
+}
+
+
+/* 4. TABLETS & IPADS COMFORT GRID (Redesign of side-by-side elements) */
+
+@media (max-width: 1024px) {
+  /* Dashboard layout adapts to 1 column cleanly */
+  .dashboard-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-sidebar {
+    border-right: none !important;
+    border-bottom: 1px solid var(--gray-200) !important;
+    padding: 20px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 15px !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+
+  .admin-sections-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Hero grid becomes single-column center-aligned on tablet */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    text-align: center !important;
+    padding: 0 20px !important;
+  }
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .hero-content h1 {
+    font-size: 38px !important;
+    max-width: 750px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-content p {
+    font-size: 16px !important;
+    max-width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Center the search elements on tablet viewports */
+  .search-container-wrapper {
+    width: 100% !important;
+    max-width: 550px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .search-bar-home {
+    width: 100% !important;
+  }
+
+  /* Popular category scroller inside hero section */
+  .hero-categories-container {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .hero-category-scroller {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  /* Hero side-cards: Display as beautiful 2-column grid instead of rotated stacks */
+  .hero-visual {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 20px !important;
+  }
+
+  .hero-orb-animation {
+    display: none !important; /* Hide slow animated backgrounds on tablets/mobile */
+  }
+
+  .hero-cards-stack {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+    width: 100% !important;
+    max-width: 850px !important;
+    padding: 0 !important;
+  }
+
+  .hero-side-card {
+    max-width: 100% !important;
+    transform: none !important; /* Remove skewed angles */
+    margin: 0 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+  }
+
+  .hero-side-card:nth-child(2) {
+    transform: none !important;
+    border-left: 4px solid var(--secondary) !important;
+  }
+
+  /* Functional Areas Categories Grid: Display 2 items per row on tablet for perfect balance */
+  .category-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+    overflow-x: visible !important;
+  }
+}
+
+
+/* 5. MEDIUM & SMART TABLETS (768px viewports) */
+
+@media (max-width: 768px) {
+  .navbar-p {
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+
+  nav.nav-menu ul {
+    gap: 15px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .admin-grid-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .job-item-horizontal {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  
+  .job-item-horizontal .job-info {
+    width: 100% !important;
+  }
+
+  .job-item-horizontal .btn {
+    width: 100% !important;
+  }
+
+  .profile-grid-edit {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    text-align: center !important;
+  }
+  
+  /* Advanced Chat Responsive Display Overrides */
+  .chat-inbox-grid {
+    grid-template-columns: 1fr !important;
+    height: calc(100vh - 73px) !important;
+  }
+  .chat-sidebar {
+    width: 100% !important;
+    display: flex !important;
+    border-right: none !important;
+    height: 100% !important;
+  }
+  .chat-conversations-viewport {
+    display: none !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  #chat-mobile-back {
+    display: inline-flex !important;
+  }
+
+  /* Featured lists grids adaptively wrap on standard mobile/tablets */
+  .featured-jobs-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .featured-freelancers-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Table responsiveness overrides - avoid squeezing! */
+  .bids-table-header {
+    display: none !important;
+  }
+
+  .bids-table-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 20px !important;
+    border-bottom: 2px solid var(--gray-200) !important;
+  }
+
+  .bids-table-row > div {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: right !important;
+  }
+
+  .bids-table-row > div::before {
+    content: attr(data-label) !important;
+    font-weight: 700 !important;
+    color: var(--gray-600) !important;
+    float: left !important;
+    text-align: left !important;
+  }
+
+  /* Responsive section title sizing */
+  .section-title {
+    font-size: 26px !important;
+    letter-spacing: -0.5px !important;
+    margin-top: 6px !important;
+  }
+
+  /* Prevent CSS Grid columns from expanding beyond container limits */
+  .metric-grid,
+  .friction-grid,
+  #trending-services-grid,
+  #live-orders-grid,
+  #blogs-container,
+  #freelancers-board-container,
+  .testimonial-grid,
+  .wallet-metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Clean up margins & padding on grid cards for tablet safety */
+  .friction-card, .testimonial-grid > .card, #live-orders-grid > .card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Force Hero CSS grid tracks to never auto-expand */
+  .hero-grid {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .hero-content {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Prevent horizontal scrollers inside grid/flex items from expanding parent widths */
+  .hero-categories-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .hero-category-scroller {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+
+/* 6. SMARTPHONES & MOBILE VIEWS (640px and below) */
+
+@media (max-width: 640px) {
+  .section {
+    padding: 48px 0 !important;
+  }
+
+  .container {
+    padding: 0 16px !important;
+  }
+
+  /* Force responsive resize on section titles */
+  .section-title {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+    margin-top: 6px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .hero-content h1 {
+    font-size: 30px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .hero-content p {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #cbd5e1 !important;
+  }
+
+  /* HERO GLASS CARDS REDESIGN: Stack vertically as beautiful full-width elements with zero clipping */
+  .hero-cards-stack {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .hero-side-card {
+    padding: 20px !important;
+    transform: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .hero-side-card:nth-child(2) {
+    transform: none !important;
+  }
+
+  /* CATEGORIES REDESIGN: 1 full-width card per row (stack vertically) with NO clipped cards and equal spacing */
+  .category-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    overflow-x: visible !important;
+    padding: 0 !important;
+  }
+
+  .category-card {
+    width: 100% !important;
+    flex: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 24px !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+
+  /* Quick Search Pill wrap alignment */
+  .search-toggle-pills {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .search-toggle-btn {
+    flex-grow: 1 !important;
+    text-align: center !important;
+    font-size: 11px !important;
+    padding: 8px !important;
+  }
+
+  /* Compact responsive search block */
+  .search-bar-home {
+    flex-direction: column !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+    gap: 8px !important;
+  }
+
+  .search-bar-home input {
+    padding: 10px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+  }
+
+  .search-bar-home button {
+    width: 100% !important;
+    padding: 12px !important;
+  }
+
+  .hero-cta-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .hero-cta-buttons .btn {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+
+  /* Bottom CTA Banner stacking */
+  .homepage-cta-banner div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .homepage-cta-banner .btn {
+    width: 100% !important;
+  }
+
+  .stats-grid, .admin-grid-metrics {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+
+/* 7. ULTRA MOBILE / EXTREMELY SMALL SCREENPHONES (320px to 390px) */
+
+@media (max-width: 390px) {
+  .hero-content h1 {
+    font-size: 24px !important;
+  }
+
+  .section-title {
+    font-size: 22px !important;
+    letter-spacing: -0.5px !important;
+  }
+  
+  .section {
+    padding: 40px 0 !important;
+  }
+  
+  .container {
+    padding: 0 12px !important;
+  }
+
+  .navbar-p {
+    padding: 10px 5px !important;
+  }
+}
+
+
+/* 8. GENERAL LAYOUT FORM HELPER RESPONSIVENESS */
+
+.form-group-row {
+  display: flex !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+.form-group-row > .form-group {
+  flex: 1 1 240px !important;
+}
+
+.modal-box {
+  width: 95% !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  padding: 20px !important;
+}

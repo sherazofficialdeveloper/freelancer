@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Center | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    (function() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) {
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* Inline specific polish */
+    .notify-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    
+    .btn-action-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      transition: all 0.2s ease;
+      font-size: 13px;
+    }
+    
+    .btn-action-icon:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-action-icon.delete:hover {
+      background: var(--error);
+      color: white;
+    }
+    
+    .notify-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .meta-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .tag-job { background-color: rgba(99, 102, 241, 0.12); color: var(--primary); }
+    .tag-bid { background-color: rgba(168, 85, 247, 0.12); color: var(--secondary); }
+    .tag-msg { background-color: rgba(56, 189, 248, 0.12); color: #0284c7; }
+    .tag-pay { background-color: rgba(16, 185, 129, 0.12); color: var(--success); }
+    .tag-alert { background-color: rgba(239, 68, 68, 0.12); color: var(--error); }
+
+    .btn-massive {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--gradient);
+      color: white;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-massive:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Header Area -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Notification Center Section -->
+  <main class="container section" style="min-height: 80vh; padding-top: 40px; padding-bottom: 60px;">
+    
+    <!-- Hero Header -->
+    <div style="margin-bottom: 30px;">
+      <span class="text-gradient" style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">Farelancer Platform</span>
+      <h1 style="font-size: 32px; font-weight: 800; letter-spacing: -0.75px; margin: 0; color: var(--dark);">Notification Center</h1>
+      <p style="color: var(--gray-600); font-size: 15px; margin-top: 6px;">Manage your bids, hired jobs, real-time communications, and secure wallet releases instantaneously.</p>
+    </div>
+
+    <!-- Layout Grid -->
+    <div class="notify-page-layout">
+      
+      <!-- Left Panel Filters -->
+      <aside class="notify-filter-box" id="page-filter-aside">
+        <h4>Filter Alerts</h4>
+        
+        <button class="notify-filter-item active" data-filter="all">
+          <span><i class="fa-solid fa-list-ul" style="margin-right: 10px; width: 14px;"></i>All Alerts</span>
+          <span class="notify-pill-count" id="badge-filter-all">0</span>
+        </button>
+        
+        <button class="notify-filter-item" data-filter="unread">
+          <span><i class="fa-solid fa-envelope" style="margin-right: 10px; width: 14px;"></i>Unread</span>
+          <span class="notify-pill-count" id="badge-filter-unread" style="background-color: var(--error); color: white;">0</span>
+        </button>
+        
+        <button class="notify-filter-item" data-filter="read">
+          <span><i class="fa-solid fa-envelope-open" style="margin-right: 10px; width: 14px;"></i>Archived</span>
+          <span class="notify-pill-count" id="badge-filter-read">0</span>
+        </button>
+
+        <div style="border-top: 1px solid var(--gray-200); margin-top: 20px; padding-top: 20px;">
+          <h4 style="margin-bottom: 8px;">Legend</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--gray-700);">
+            <div style="display: flex; align-items: center; gap: 8px;"><div class="bell-icon-wrap grad-job" style="width: 20px; height: 20px; font-size: 8px; border-radius: 4px;"><i class="fa-solid fa-briefcase"></i></div> Job Milestones</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><div class="bell-icon-wrap grad-bid" style="width: 20px; height: 20px; font-size: 8px; border-radius: 4px;"><i class="fa-solid fa-gavel"></i></div> Proposals / Bids</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><div class="bell-icon-wrap grad-msg" style="width: 20px; height: 20px; font-size: 8px; border-radius: 4px;"><i class="fa-solid fa-comment-dots"></i></div> Direct Messages</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><div class="bell-icon-wrap grad-pay" style="width: 20px; height: 20px; font-size: 8px; border-radius: 4px;"><i class="fa-solid fa-wallet"></i></div> Financial Releases</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><div class="bell-icon-wrap grad-alert" style="width: 20px; height: 20px; font-size: 8px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i></div> System Alerts</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Panel List Results -->
+      <section class="notify-results-card">
+        <div class="notify-results-header">
+          <h2 id="current-filter-title">All Activity Alerts</h2>
+          
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="btn-full-mark-all" class="btn btn-secondary" style="font-size: 12px; font-weight: 700; padding: 8px 14px; border: 1px solid var(--gray-300); border-radius: 8px; background: white; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-square-check"></i> Mark all read
+            </button>
+            <button id="btn-mock-broadcast" class="btn-massive" title="Create a test platform milestone alert for demonstration purposes">
+              <i class="fa-solid fa-satellite-dish"></i> Emit Test Milestones
+            </button>
+          </div>
+        </div>
+
+        <!-- Master List -->
+        <div id="notifications-full-container">
+          <div style="text-align: center; padding: 60px;" id="loading-spinner">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--primary);"></i>
+            <p style="color: var(--gray-600); margin-top: 14px; font-weight: 500;">Retrieving synchronized activity feeds...</p>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Area -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Assets and Core Utility -->
+  <script src="/assets/js/main.js"></script>
+
+  <!-- Centralized Notification UI handler -->
+  <script>
+    let activeFilter = 'all';
+
+    // Verify session
+    function checkSession() {
+      // Ensure local state loaded
+      const localToken = localStorage.getItem('token');
+      if (!localToken) {
+        window.location.href = '/login?redirect=/notifications';
+      }
+    }
+
+    // Custom tag format
+    function getNotificationTag(type) {
+      switch (type) {
+        case 'job_posted': return '<span class="meta-tag tag-job">Job space live</span>';
+        case 'bid_received': return '<span class="meta-tag tag-bid">Proposal received</span>';
+        case 'bid_accepted': return '<span class="meta-tag tag-bid">Contract activated</span>';
+        case 'message_received': return '<span class="meta-tag tag-msg">Inbox Message</span>';
+        case 'payment_released': return '<span class="meta-tag tag-pay">Wallet Disbursed</span>';
+        case 'system_alert': return '<span class="meta-tag tag-alert">System Event</span>';
+        default: return '<span class="meta-tag tag-job">Activity</span>';
+      }
+    }
+
+    // Load full dashboard results
+    async function fetchFullNotifications() {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const container = document.getElementById('notifications-full-container');
+      if (!container) return;
+
+      try {
+        const res = await fetch('/api/notifications', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (res.ok) {
+          const result = await res.json();
+          if (result.success && result.data) {
+            window.FarelanceruState.notifications = Array.isArray(result.data) ? result.data : (result.data.notifications || []);
+            syncNotificationsFullList();
+          }
+        } else {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 40px; border: 1px dashed var(--gray-300); border-radius: 8px; background: #fafafa;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 32px; color: var(--error);"></i>
+              <p style="margin-top: 12px; font-weight: 600; color: var(--dark);">API sync failed. Please log in again.</p>
+            </div>`;
+        }
+      } catch (err) {
+        console.error('Failed fetching full notification catalog: ', err);
+      }
+    }
+
+    function syncNotificationsFullList() {
+      const container = document.getElementById('notifications-full-container');
+      if (!container) return;
+
+      const items = window.FarelanceruState.notifications || [];
+      
+      // Update filter badges count
+      const allCount = items.length;
+      const unreadCount = items.filter(n => !n.isRead).length;
+      const readCount = items.filter(n => n.isRead).length;
+
+      document.getElementById('badge-filter-all').innerText = allCount;
+      document.getElementById('badge-filter-unread').innerText = unreadCount;
+      document.getElementById('badge-filter-read').innerText = readCount;
+
+      // Filter local lists
+      let filteredItems = items;
+      if (activeFilter === 'unread') {
+        filteredItems = items.filter(n => !n.isRead);
+      } else if (activeFilter === 'read') {
+        filteredItems = items.filter(n => n.isRead);
+      }
+
+      if (filteredItems.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 60px 20px; text-align: center;" id="empty-state">
+            <i class="fa-regular fa-bell-slash" style="font-size: 40px; color: var(--gray-300); margin-bottom: 12px; display: block;"></i>
+            <h3 style="font-size: 16px; font-weight: 700; color: var(--dark);">No matches found</h3>
+            <p style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">Dynamic filters do not detect notification cards for "${activeFilter}".</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredItems.map(item => {
+        return `
+          <div class="notify-card-item ${item.isRead ? '' : 'unread'}" id="full-notify-${item._id}">
+            ${window.getNotificationIcon ? window.getNotificationIcon(item.type) : '<div class="bell-icon-wrap grad-job"><i class="fa-solid fa-bell"></i></div>'}
+            
+            <div style="flex-grow: 1;">
+              <div class="notify-action-row">
+                <h3 style="font-size: 15px; font-weight: 800; color: var(--dark); margin: 0;">${item.title}</h3>
+                <span class="bell-time" style="font-size: 11px; font-weight: 600; color: var(--gray-600);">${window.formatNotificationTime ? window.formatNotificationTime(item.createdAt) : new Date(item.createdAt).toLocaleDateString()}</span>
+              </div>
+              <p style="font-size: 13.5px; color: var(--gray-700); margin-top: 4px; line-height: 1.5; margin-bottom: 6px;">${item.message}</p>
+              ${getNotificationTag(item.type)}
+            </div>
+
+            <div class="notify-card-actions">
+              ${!item.isRead ? `
+                <button class="btn-action-icon" title="Mark alert as read" onclick="triggerMarkAsRead('${item._id}', event)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>` : ''
+              }
+              <button class="btn-action-icon delete" title="Permanently delete metadata record" onclick="triggerDeleteNotification('${item._id}', event)">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Expose layout listener callbacks to sync immediately with navbar bell
+    window.syncNotificationsFullList = syncNotificationsFullList;
+    window.syncNotificationCounts = function(unreadCount, allList) {
+      document.getElementById('badge-filter-unread').innerText = unreadCount;
+      document.getElementById('badge-filter-all').innerText = allList ? allList.length : 0;
+      document.getElementById('badge-filter-read').innerText = allList ? allList.filter(n => n.isRead).length : 0;
+    };
+
+    // Filter Navigation Click Toggles
+    function setupFilterListeners() {
+      const filters = document.querySelectorAll('.notify-filter-item');
+      filters.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          filters.forEach(b => b.classList.remove('active'));
+          const target = e.currentTarget;
+          target.classList.add('active');
+          activeFilter = target.getAttribute('data-filter');
+          
+          // update title
+          const titles = {
+            'all': 'All Activity Alerts',
+            'unread': 'Unread Inbox Feeds',
+            'read': 'Archived Notification History'
+          };
+          document.getElementById('current-filter-title').innerText = titles[activeFilter];
+          
+          syncNotificationsFullList();
+        });
+      });
+    }
+
+    // Emit live mock milestone alerts dynamically
+    function setupTestEmitter() {
+      const btn = document.getElementById('btn-mock-broadcast');
+      if (!btn) return;
+
+      btn.addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        // Choose random notification template
+        const types = ['job_posted', 'bid_received', 'message_received', 'payment_released', 'system_alert'];
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        
+        let payload = {
+          type: randomType,
+          title: 'Test Platform Alert',
+          message: 'This is a simulation trigger event. Live notification broadcasted successfully across websockets.'
+        };
+
+        if (randomType === 'job_posted') {
+          payload.title = 'New Fast Job Matches Found!';
+          payload.message = 'A client just uploaded a new contract matches with your high priority skills tags.';
+        } else if (randomType === 'bid_received') {
+          payload.title = 'Hires Competitive Bid Placed';
+          payload.message = 'An offshore elite developer submitted a bids request on your public database contract.';
+        } else if (randomType === 'payment_released') {
+          payload.title = 'Secure Payment Released';
+          payload.message = 'Milestone escrow contract cleared! $500.00 mock earnings are ready for ledger wire cashout.';
+        } else if (randomType === 'system_alert') {
+          payload.title = 'Security Protocol Maintenance';
+          payload.message = 'Platform cloud maintenance: all pending mock smart deposits are safeguarded under hardware ledger.';
+        }
+
+        try {
+          const res = await fetch('/api/notifications/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            const out = await res.json();
+            if (out.success) {
+              // Real-time listener handles reload natively via Socket!
+              // But if sockets are offline, we sync fallback manually.
+              if (window.FarelanceruState.notifications) {
+                const alreadyAdded = window.FarelanceruState.notifications.some(n => n._id === out.data._id);
+                if (!alreadyAdded) {
+                  window.FarelanceruState.notifications.unshift(out.data);
+                  syncNotificationsFullList();
+                  if (window.updateNavbarBellBadge) {
+                    window.updateNavbarBellBadge();
+                  }
+                  if (window.renderNavbarDropdownList) {
+                    window.renderNavbarDropdownList();
+                  }
+                }
+              }
+              showToast('Broadcast simulated platform event successfully!', 'success');
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Mark all as read click events
+    function setupMarkAllListener() {
+      const btn = document.getElementById('btn-full-mark-all');
+      if (!btn) return;
+
+      btn.addEventListener('click', async () => {
+        if (window.triggerMarkAllAsRead) {
+          await window.triggerMarkAllAsRead();
+        }
+      });
+    }
+
+    // App Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      checkSession();
+      fetchFullNotifications();
+      setupFilterListeners();
+      setupTestEmitter();
+      setupMarkAllListener();
+    });
+
+  </script>
+</body>
+</html>

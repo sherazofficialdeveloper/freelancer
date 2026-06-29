@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hire Top Experts | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    .expert-hero-bg {
+      background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+      padding: 60px 0;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .expert-hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+    }
+    .expert-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .expert-card:hover {
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.06), 0 10px 10px -5px rgba(0,0,0,0.04);
+      transform: translateY(-4px);
+      border-color: var(--gray-300);
+    }
+    .expert-cover {
+      height: 90px;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .expert-avatar-wrap {
+      margin-top: -35px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .expert-photo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+      box-shadow: var(--shadow-sm);
+      object-fit: cover;
+    }
+    .skill-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 14px 0;
+    }
+    .skill-pill-item {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    .expert-card:hover .skill-pill-item {
+      background: rgba(99, 102, 241, 0.05);
+      color: var(--primary);
+    }
+    
+    /* Interactive Drawer CSS */
+    .profile-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 10001;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .profile-drawer-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+    .profile-drawer {
+      position: fixed;
+      top: 0;
+      right: -600px;
+      width: 100%;
+      max-width: 580px;
+      height: 100vh;
+      background: white;
+      z-index: 10002;
+      box-shadow: -10px 0 40px rgba(15,23,42,0.15);
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-drawer.active {
+      right: 0;
+    }
+    .profile-drawer-body {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+    
+    /* Stars */
+    .star-gold {
+      color: #fbbf24;
+    }
+    .star-gray {
+      color: #e2e8f0;
+    }
+    
+    /* Portfolio Showcases Grid */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 15px;
+    }
+    .showcase-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: white;
+      transition: all 0.2s ease;
+    }
+    .showcase-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+  </style>
+</head>
+<body style="background-color: var(--gray-50);">
+
+  <div id="navbar-placeholder"></div>
+
+  <!-- Hero Headline search area -->
+  <section class="expert-hero-bg">
+    <div class="container" style="position: relative; z-index: 2; max-width: 720px;">
+      <span style="font-size: 13px; font-weight: 700; text-transform: uppercase; background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.5px;">Vetted Talents Guild</span>
+      <h1 style="font-size: 38px; font-weight: 800; margin: 12px 0 8px; letter-spacing: -1px; line-height: 1.2;">Discover Premier Creative & Technical Specialists</h1>
+      <p style="color: var(--gray-300); font-size: 15px; margin-bottom: 24px; line-height: 1.5;">Hire independent contractors with transparent escrow milestone contracts. Read verified peer feedback reviews and browse dynamic project showcases.</p>
+      
+      <!-- Interactive Input Area -->
+      <div style="background: white; padding: 6px; border-radius: 99px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--gray-600); margin-left: 14px; font-size: 16px;"></i>
+        <input type="text" id="experts-search-input" placeholder="Search skills, bio descriptions, or name (e.g. React, UI/UX, Solana)..." style="border: none; outline: none; flex-grow: 1; padding: 10px; font-size: 14px; font-weight: 500; color: var(--dark);">
+        <button class="btn btn-primary" id="btn-experts-search" style="padding: 10px 24px; border-radius: 99px; background: var(--gradient) !important;"><i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 6px;"></i> Search</button>
+      </div>
+
+      <!-- Quick filters row -->
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+        <span style="font-size: 12px; color: var(--gray-400); align-self: center; font-weight: 600;">Trending:</span>
+        <button class="trending-badge-btn" onclick="applyExpertFilterTag('React')" style="background: rgba(255,255,255,0.08); border: none; font-size: 11.5px; color: white; padding: 3px 10px; border-radius: 99px; cursor: pointer; transition: all 0.2s;">React</button>
+        <button class="trending-badge-btn" onclick="applyExpertFilterTag('Design')" style="background: rgba(255,255,255,0.08); border: none; font-size: 11.5px; color: white; padding: 3px 10px; border-radius: 99px; cursor: pointer; transition: all 0.2s;">Design</button>
+        <button class="trending-badge-btn" onclick="applyExpertFilterTag('Web3')" style="background: rgba(255,255,255,0.08); border: none; font-size: 11.5px; color: white; padding: 3px 10px; border-radius: 99px; cursor: pointer; transition: all 0.2s;">Web3</button>
+        <button class="trending-badge-btn" onclick="applyExpertFilterTag('Python')" style="background: rgba(255,255,255,0.08); border: none; font-size: 11.5px; color: white; padding: 3px 10px; border-radius: 99px; cursor: pointer; transition: all 0.2s;">Python</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Catalog Dashboard Layout -->
+  <section class="section">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+          <h2 style="font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.5px;" id="experts-count-header">Expert Listings</h2>
+          <p style="color: var(--gray-600); font-size: 13.5px; margin: 2px 0 0;">Strict performance vetting with escrow payments guarantee.</p>
+        </div>
+        
+        <!-- Quick sort dropdown -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 13px; color: var(--gray-600); font-weight: 600;">Sort By:</span>
+          <select id="experts-sort-select" style="padding: 8px 14px; border-radius: 8px; border: 1px solid var(--gray-200); font-size: 13px; font-weight: 600; cursor: pointer; background: white;">
+            <option value="rating">Highest Ratings</option>
+            <option value="contracts">Most Contracts completed</option>
+            <option value="rate-low">Lowest hourly rate</option>
+            <option value="rate-high">Highest hourly rate</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Freelancers card grid -->
+      <div id="freelancers-board-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; min-height: 400px;">
+        <!-- Loaded dynamically via js/jobs.js -->
+        <div style="text-align: center; color: var(--gray-600); padding: 80px 0; grid-column: span 12;">
+          <div style="width: 48px; height: 48px; border: 4px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+          <p style="font-size: 15px; font-weight: 600;">Assembling vetted top-level independent experts...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE DETAILED PROFILE DRAWER -->
+  <div class="profile-drawer-overlay" id="profile-drawer-overlay"></div>
+  <div class="profile-drawer" id="profile-drawer">
+    <div style="padding: 18px 24px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; background: var(--gray-50);">
+      <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--dark); display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-user-check" style="color: var(--primary);"></i> Vetted Contractor Profile</h3>
+      <button style="border: none; background: none; font-size: 18px; color: var(--gray-600); cursor: pointer;" id="btn-close-profile-drawer"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    
+    <div class="profile-drawer-body" id="profile-drawer-content-box">
+      <!-- Loaded dynamically via JavaScript in assets/js/jobs.js -->
+    </div>
+  </div>
+
+  <!-- INTERACTIVE PORTFOLIO PROJECT DETAIL MODAL -->
+  <div class="modal-overlay" id="portfolio-project-detail-modal" style="z-index: 10005;">
+    <div class="card" style="width: 100%; max-width: 520px; padding: 24px; border-radius: 16px; position: relative;">
+      <button style="position: absolute; top: 18px; right: 18px; background: none; border: none; font-size: 18px; color: var(--gray-600); cursor: pointer;" onclick="toggleModal('portfolio-project-detail-modal', false)"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div id="portfolio-detail-img-wrapper" style="width:100%; height: 180px; border-radius: 12px; margin-bottom: 20px; background-size: cover; background-position: center; border: 1px solid var(--gray-200);"></div>
+      
+      <h3 id="portfolio-detail-title" style="font-size: 20px; font-weight: 800; margin-bottom: 10px;" class="text-gradient">Project Showroom</h3>
+      <p id="portfolio-detail-desc" style="font-size: 14px; color: var(--gray-700); line-height: 1.5; margin-bottom: 20px; white-space: pre-wrap;"></p>
+      
+      <div style="display: flex; gap: 12px;">
+        <a id="portfolio-detail-url" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex-grow: 1; justify-content: center;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Project URL</a>
+        <button class="btn btn-secondary" onclick="toggleModal('portfolio-project-detail-modal', false)" style="width: 100px; justify-content: center;">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/jobs.js"></script>
+  <script>
+    // Tag filter quick injector helpers
+    function applyExpertFilterTag(tag) {
+      const inp = document.getElementById('experts-search-input');
+      if (inp) {
+        inp.value = tag;
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+        // Trigger click if btn exists
+        document.getElementById('btn-experts-search')?.click();
+      }
+    }
+  </script>
+</body>
+</html>

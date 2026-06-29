@@ -1,0 +1,316 @@
+<header class="navbar-main navbar-glass" id="platform-navbar">
+  <style>
+    /* Premium Navbar Search Bar and Dropdown Styles */
+    .nav-global-search-container {
+      display: none;
+    }
+    
+    @media (min-width: 768px) {
+      .nav-global-search-container {
+        display: flex !important;
+        position: relative;
+        width: 320px;
+        margin: 0 12px;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .nav-global-search-container {
+        width: 400px !important;
+        max-width: 400px !important;
+        margin: 0 20px;
+      }
+    }
+
+    #nav-global-search-input {
+      width: 100%;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      padding: 7px 16px 7px 36px;
+      font-size: 13px;
+      outline: none;
+      background: var(--gray-50);
+      color: var(--dark);
+      transition: all 0.25s ease;
+      font-weight: 500;
+    }
+
+    #nav-global-search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      background: white;
+    }
+
+    /* Mobile search trigger */
+    .mobile-search-trigger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: all 0.2s ease;
+    }
+    .mobile-search-trigger:hover {
+      background: var(--gray-200);
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    /* Mobile close button */
+    .mobile-search-close-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--gray-500);
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: all 0.2s ease;
+    }
+    .mobile-search-close-btn:hover {
+      background: var(--gray-100);
+      color: var(--error);
+    }
+
+    @media (max-width: 767px) {
+      .mobile-search-trigger {
+        display: flex;
+      }
+      
+      .nav-global-search-container.mobile-expanded {
+        display: flex !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 100% !important;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 16px;
+        background: white;
+        z-index: 10000;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-global-search-container.mobile-expanded .mobile-search-close-btn {
+        display: flex;
+      }
+
+      .nav-global-search-container.mobile-expanded #nav-search-dropdown {
+        top: 50px;
+        left: 12px;
+        right: 12px;
+        width: calc(100% - 24px) !important;
+      }
+    }
+
+    /* Search Dropdown Layout styling */
+    #nav-search-dropdown {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 3px 10px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--gray-200);
+      z-index: 10000;
+      padding: 14px 16px;
+      text-align: left;
+      display: none;
+      animation: navFadeDropdownIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes navFadeDropdownIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Search badge & item list tags */
+    .search-section-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      display: block;
+      margin-bottom: 10px;
+      letter-spacing: 0.8px;
+      font-family: var(--font-sans);
+    }
+
+    .badge-pill-item {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: 1px solid var(--gray-100);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-pill-item:hover {
+      background: #eff6ff; /* Tailwind blue-50 */
+      color: var(--primary);
+      border-color: #bfdbfe;
+      transform: translateY(-1px);
+    }
+
+    .search-suggestion-item {
+      font-size: 13px;
+      color: var(--dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-weight: 500;
+    }
+    .search-suggestion-item:hover, .search-suggestion-item.active {
+      background: #f3f4f6 !important;
+      color: var(--primary) !important;
+      transform: translateX(4px);
+    }
+
+    .search-suggestion-item i {
+      font-size: 13px;
+      color: var(--gray-400);
+      transition: transform 0.2s ease;
+    }
+    .search-suggestion-item:hover i, .search-suggestion-item.active i {
+      color: var(--primary);
+      transform: scale(1.15);
+    }
+  </style>
+
+  <div class="container navbar-p">
+    <!-- Brand Logo -->
+    <a href="/" class="logo-link">
+      <div class="logo-orb" style="display: flex; align-items: center; justify-content: center; background: var(--gradient);">
+        <i class="fa-solid fa-magnifying-glass-dollar" style="color: rgb(255, 255, 255);"></i>
+      </div>
+      <span class="text-gradient" style="font-weight: 800; letter-spacing: -0.8px; font-size: 22px; font-family: var(--font-heading);">Farelancer</span>
+    </a>
+
+    <!-- Unified Global Search Input (Desktop & Tablet & Mobile Expandable) -->
+    <div class="nav-global-search-container" id="nav-global-search-box">
+      <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 13px; pointer-events: none; z-index: 1;"></i>
+      <input type="text" id="nav-global-search-input" placeholder="Search gigs, jobs, talents..." autocomplete="off" onfocus="window.showGlobalSearchDropdown(true)" onblur="setTimeout(() => window.showGlobalSearchDropdown(false), 250)" oninput="window.handleGlobalSearchInput(this.value)">
+      
+      <!-- Mobile Close Trigger -->
+      <button class="mobile-search-close-btn" id="mobile-search-close" aria-label="Close Search" onclick="window.toggleMobileSearch(false)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Search dropdown recommendations card -->
+      <div id="nav-search-dropdown">
+        <div id="search-recent-queries" style="margin-bottom: 16px;">
+          <span class="search-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Searches</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="nav-search-recents-list">
+            <span class="badge-pill-item" onclick="document.getElementById('nav-global-search-input').value='Web'; window.handleGlobalSearchInput('Web')">Web Platform</span>
+            <span class="badge-pill-item" onclick="document.getElementById('nav-global-search-input').value='Logo'; window.handleGlobalSearchInput('Logo')">Logo Design</span>
+          </div>
+        </div>
+        <div id="search-dynamic-suggestions">
+          <span class="search-section-title" id="suggestions-header-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Direct Suggestions</span>
+          <div id="nav-search-suggestions-list" style="display: flex; flex-direction: column; gap: 4px;">
+            <!-- Rendered dynamically by handleGlobalSearchInput -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav Menu links (Desktop) -->
+    <nav class="nav-menu">
+      <ul style="display: flex; gap: 18px; align-items: center; list-style: none;">
+        <li><a href="/jobs?mode=services" class="nav-link-item" id="nav-item-gigs"><i class="fa-solid fa-tags" style="font-size: 13px;"></i> Fiverr Gigs</a></li>
+        <li><a href="/jobs?mode=jobs" class="nav-link-item" id="nav-item-jobs"><i class="fa-solid fa-briefcase" style="font-size: 13px;"></i> Upwork Jobs</a></li>
+        <li><a href="/freelancers" class="nav-link-item" id="nav-item-freelancers"><i class="fa-solid fa-user-tie" style="font-size: 13px;"></i> Experts</a></li>
+        <li><a href="/blogs" class="nav-link-item" id="nav-item-blogs"><i class="fa-solid fa-blog" style="font-size: 13px;"></i> Blogs</a></li>
+        <li><a href="/contact" class="nav-link-item" id="nav-item-contact"><i class="fa-solid fa-envelope" style="font-size: 13px;"></i> Contact</a></li>
+        <li><a href="/about" class="nav-link-item" id="nav-item-about"><i class="fa-solid fa-info-circle" style="font-size: 13px;"></i> About</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Side: Controls and User Dropdown -->
+    <div class="nav-controls-right">
+      <!-- Session Container: Dynamic content loaded here -->
+      <div class="nav-auth" id="navbar-auth-section">
+        <!-- Default signed-out state, gets overwritten by main.js if logged in -->
+        <a href="/login" class="nav-link-item" style="font-weight: 600; color: var(--gray-700);"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
+        <a href="/register" class="btn btn-primary" style="padding: 8px 18px; font-weight: 700; font-size: 13px;"><i class="fa-solid fa-user-plus"></i> Join Now</a>
+      </div>
+
+      <!-- Mobile Search Trigger Button -->
+      <button class="mobile-search-trigger" id="mobile-search-trigger" aria-label="Toggle Search" onclick="window.toggleMobileSearch(true)">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="nav-hamburger-btn" id="mobile-hamburger-trigger" aria-label="Toggle Navigation Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+<div class="mobile-drawer" id="mobile-drawer">
+  <div class="mobile-drawer-header">
+    <a href="/" class="logo-link">
+      <div class="logo-orb" style="display: flex; align-items: center; justify-content: center; background: var(--gradient);">
+        <i class="fa-solid fa-feather-pointed" style="color: white; font-size: 12px;"></i>
+      </div>
+      <span class="text-gradient" style="font-weight: 800; letter-spacing: -0.5px; font-size: 18px;">Farelancer</span>
+    </a>
+    <button class="mobile-drawer-close" id="mobile-drawer-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  
+  <div class="mobile-drawer-body">
+    <!-- User state placeholder for mobile -->
+    <div id="mobile-drawer-profile-panel" class="mobile-profile-spot"></div>
+    
+    <ul class="mobile-nav-links" style="margin-bottom: 24px;">
+      <li><a href="/jobs?mode=services"><i class="fa-solid fa-tags"></i> Browse Fiverr Gigs</a></li>
+      <li><a href="/jobs?mode=jobs"><i class="fa-solid fa-briefcase"></i> Browse Upwork Jobs</a></li>
+      <li><a href="/freelancers"><i class="fa-solid fa-user-tie"></i> Talents Directory</a></li>
+      <li><a href="/blogs"><i class="fa-solid fa-blog"></i> Read Blog Articles</a></li>
+      <li><a href="/contact"><i class="fa-solid fa-envelope"></i> Contact Support</a></li>
+      <li><a href="/about"><i class="fa-solid fa-info-circle"></i> About Farelancer</a></li>
+      <li><a href="/faq"><i class="fa-solid fa-circle-question"></i> Help & FAQs</a></li>
+    </ul>
+    
+    <div class="mobile-sidebar-actions-placeholder" id="mobile-drawer-actions">
+      <!-- Logout or login buttons inject here -->
+    </div>
+  </div>
+</div>

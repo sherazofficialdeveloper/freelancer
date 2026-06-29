@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ, Terms & Support | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    .support-tab-nav {
+      display: flex;
+      gap: 12px;
+      border-bottom: 2px solid var(--gray-200);
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    
+    .tab-btn {
+      padding: 12px 24px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--gray-600);
+      background: none;
+      border: none;
+      border-bottom: 3.5px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+    
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .faq-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .faq-item {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .faq-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+    
+    .faq-header {
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--dark);
+      font-size: 15.5px;
+      user-select: none;
+    }
+    
+    .faq-header i {
+      color: var(--primary);
+      transition: transform 0.2s ease;
+    }
+    
+    .faq-body {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 24px;
+      color: var(--gray-700);
+      font-size: 14.5px;
+      line-height: 1.6;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+    }
+    
+    .faq-item.active {
+      border-color: var(--primary);
+      background: linear-gradient(to right, #fdfeff, #ffffff);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.08);
+    }
+    
+    .faq-item.active .faq-body {
+      padding: 0 24px 20px;
+    }
+    
+    .faq-item.active .faq-header i {
+      transform: rotate(180deg);
+    }
+    
+    .terms-card {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      line-height: 1.7;
+    }
+    
+    .terms-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modular Header -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Primary Grid Container -->
+  <main class="container section" style="min-height: 80vh; padding-top: 40px; padding-bottom: 60px;">
+    
+    <!-- Hero Banner Text -->
+    <div style="margin-bottom: 30px; text-align: center;">
+      <span class="text-gradient" style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Farelancer Help Center</span>
+      <h1 style="font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin: 6px 0 0; color: var(--dark);">SaaS Knowledgebase Hub</h1>
+      <p style="color: var(--gray-600); font-size: 15px; max-width: 600px; margin: 8px auto 0;">Have queries regarding secure escrow accounts, milestone project approvals, and creative bids? Find quick answers below.</p>
+    </div>
+
+    <!-- Panel Select Buttons -->
+    <div class="support-tab-nav" id="helpcenter-tab-list">
+      <button class="tab-btn active" data-tab="faq-panel">
+        <i class="fa-solid fa-circle-question" style="margin-right: 8px;"></i>FAQs & Solutions
+      </button>
+      <button class="tab-btn" data-tab="support-panel">
+        <i class="fa-solid fa-headset" style="margin-right: 8px;"></i>Contact Support
+      </button>
+      <button class="tab-btn" data-tab="terms-panel">
+        <i class="fa-solid fa-scale-balanced" style="margin-right: 8px;"></i>Terms of Use & Privacy
+      </button>
+    </div>
+
+    <!-- PANEL 1: FAQs Accordion -->
+    <div id="faq-panel" class="tab-content-panel active">
+      <div class="faq-accordion">
+        
+        <div class="faq-item">
+          <div class="faq-header" id="faq-q1">
+            <span>How does the secure budget escrow system work?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-body" id="faq-a1">
+            When a buyer hires a freelancer, the listed project budget is immediately deducted from the buyer's balance and locked inside a secure project escrow contract. The freelancer can work with 100% confidence knowing the funds are guaranteed. Upon delivery of work, the buyer approves the submissions to release escrow credits directly into the freelancer's wallet.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" id="faq-q2">
+            <span>Can freelancers place custom rates on gig proposals?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-body" id="faq-a2">
+            Yes! Freelancers browse the public job space and place competitive proposals. Inside the proposal, the freelancer designates their customized bidding rate and expectations notes, which are routed to the buyer panel instantaneously.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" id="faq-q3">
+            <span>Are direct chats encrypted and instantaneous?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-body" id="faq-a3">
+            Absolutely. Direct messaging on Farelancer is powered by robust Socket.io WebSockets, carrying instant chat threads, activity telemetry logs, active typing states, and notifications back and forth instantly without manual page refreshing.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" id="faq-q4">
+            <span>How do I fund my wallet for hiring or cash out completed earnings?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-body" id="faq-a4">
+            Our sandbox wallet mimics real-world banking ledgers. Buyers receive complimentary credit upon register setup to test and post gigs. Completed freelancers can request mock withdrawals via wire transfer or credit card directly in the secure wallet dashboard.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PANEL 2: Contact Support Form -->
+    <div id="support-panel" class="tab-content-panel" style="display: none;">
+      <div class="card" style="max-width: 580px; margin: 0 auto; padding: 36px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);">
+        <h2 style="font-size: 22px; font-weight: 850; color: var(--dark) ; margin-bottom: 6px;">Submit a Helpdesk Ticket</h2>
+        <p style="color: var(--gray-600); font-size: 13.5px; margin-bottom: 24px;">Our engineering staff will investigate your inquiry and reply within 4 hours.</p>
+        
+        <form id="support-ticket-form">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="supp-name" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Registered Account Email</label>
+            <input type="email" id="supp-email" class="form-control" placeholder="e.g. john@demo.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Inquiry Subject</label>
+            <select id="supp-subject" class="form-control" style="cursor: pointer;">
+              <option value="Escrow Hold Release">Escrow Hold & Billing Queries</option>
+              <option value="Wallet Disbursals">Wallet Mock Wire Cashout</option>
+              <option value="Freelancer Bid Negotiation">Contract Conflict Negotiation</option>
+              <option value="Account Access and Security">Account Moderation & Security Help</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label">Detailed Ticket Explanation / Messages</label>
+            <textarea id="supp-message" class="form-control" rows="5" placeholder="Detail any steps taken, job IDs or transaction hashes to help our support specialists solve your ticket swiftly..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700;">Submit Helpdesk Ticket</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- PANEL 3: Terms & Privacy Policies -->
+    <div id="terms-panel" class="tab-content-panel" style="display: none;">
+      <div class="terms-card">
+        <h2 style="font-size: 24px; font-weight: 850; color: var(--dark); border-bottom: 1px solid var(--gray-200); padding-bottom: 14px;">Marketplace Terms of Service</h2>
+        <p style="font-size: 12px; color: var(--gray-600); font-weight: 600; text-transform: uppercase; margin-top: 10px;">Last modified: June 8, 2026</p>
+        
+        <h3>1. Platform Scope</h3>
+        <p style="color: var(--gray-700); font-size: 14px; margin-top: 6px;">
+          Farelancer provides elite software-as-a-service matching services between employers (buyers) and creative freelancers. Users are registered as self-determined contracts and bound under escrow agreements. We do not act as direct employees.
+        </p>
+
+        <h3>2. Financial Escrow Guarantees</h3>
+        <p style="color: var(--gray-700); font-size: 14px; margin-top: 6px;">
+          Escrow actions are handled automatically under backend database security. When a buyer recruits, they warrant the budget holds are immediately locked inside secure non-refundable escrow. Approval releases the credit instantaneously. Freelancers must deliver authentic and fully functional assets.
+        </p>
+
+        <h3>3. Professional Accountability</h3>
+        <p style="color: var(--gray-700); font-size: 14px; margin-top: 6px;">
+          Any forms of copyright infringement, credential misrepresentation, spam bidding, or malicious behavioral attacks are strictly prohibited and result in immediate ban action by the admin monitoring systems.
+        </p>
+
+        <h3>4. Privacy Protections</h3>
+        <p style="color: var(--gray-700); font-size: 14px; margin-top: 6px;">
+          Your private data, encrypted digests, balance ledgers, and transaction metrics are stored using robust database encryption layouts, and never sold to third-party commercial entities.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modular Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/main.js"></script>
+  <script>
+    // Tab switching engine
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const contentPanels = document.querySelectorAll('.tab-content-panel');
+    
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        // Clear active buttons
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const targetId = btn.getAttribute('data-tab');
+        
+        contentPanels.forEach(panel => {
+          panel.style.display = 'none';
+          panel.classList.remove('active');
+        });
+        
+        const targetPanel = document.getElementById(targetId);
+        if (targetPanel) {
+          targetPanel.style.display = 'block';
+          targetPanel.classList.add('active');
+        }
+      });
+    });
+
+    // FAQs Accordion collapsible actions
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const header = item.querySelector('.faq-header');
+      const body = item.querySelector('.faq-body');
+      
+      // Initialize default flat height
+      body.style.maxHeight = '0px';
+      
+      header.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Collapse all others smoothly
+        faqItems.forEach(faq => {
+          faq.classList.remove('active');
+          faq.querySelector('.faq-body').style.maxHeight = '0px';
+        });
+
+        if (!isActive) {
+          item.classList.add('active');
+          // Add padding height of 20px to scrollHeight for complete clearance
+          body.style.maxHeight = (body.scrollHeight + 20) + 'px';
+        }
+      });
+    });
+
+    // URL parameters route mapping
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const viewParam = window.location.pathname;
+      if (viewParam.includes('support')) {
+        simulateTabClick('support-panel');
+      } else if (viewParam.includes('terms')) {
+        simulateTabClick('terms-panel');
+      } else if (viewParam.includes('faq')) {
+        simulateTabClick('faq-panel');
+      }
+    });
+
+    function simulateTabClick(panelId) {
+      const triggerBtn = document.querySelector(`[data-tab="${panelId}"]`);
+      if (triggerBtn) triggerBtn.click();
+    }
+
+    // Support ticket submit simulation
+    const supportForm = document.getElementById('support-ticket-form');
+    if (supportForm) {
+      supportForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+          showToast('🔒 Please log in first to submit a support ticket. We protect helpdesk inquiries with authentication.', 'error');
+          return;
+        }
+
+        const submitBtn = supportForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerText;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Dispatching...';
+
+        const subjectSelect = document.getElementById('supp-subject').value;
+        const message = document.getElementById('supp-message').value.trim();
+
+        try {
+          const res = await fetch('/api/admin/public-tickets', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              subject: `[FAQ Helpdesk] ${subjectSelect}`,
+              initialMessage: message
+            })
+          });
+          const result = await res.json();
+          if (result.success) {
+            showToast(`📬 Support ticket submitted successfully! Assigned ID: #${result.data.ticket._id.substring(18)}`, 'success');
+            supportForm.reset();
+          } else {
+            showToast(result.message || 'Failed to submit support ticket.', 'error');
+          }
+        } catch (err) {
+          console.error('Error submitting support ticket:', err);
+          showToast('Server connection error. Please try again.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

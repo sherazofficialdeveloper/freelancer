@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Hub | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    (function() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) {
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- AUTH SHIELD LOADING OVERLAY -->
+  <div id="dashboard-auth-loading-overlay" style="position: fixed; inset: 0; background: #0f172a; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; font-family: sans-serif; transition: opacity 0.5s ease;">
+    <div style="width: 48px; height: 48px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: #6366f1; border-radius: 50%; animation: d-spin 1s linear infinite;"></div>
+    <p style="font-weight: 700; color: white; font-size: 15px; margin: 0; letter-spacing: -0.3px;">Loading workspace dashboard...</p>
+    <style>
+      @keyframes d-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </div>
+
+  <!-- Reusable modular header navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Primary Dashboard Split Panel Layout -->
+  <main class="dashboard-layout">
+    
+    <!-- Sidebar template placeholder injected via main.js -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Operations workspace screen -->
+    <section class="dashboard-content">
+      <div class="welcome-header">
+        <div>
+          <h2 id="dashboard-overview-title">Workspace Hub</h2>
+          <p style="color: var(--gray-600); font-size: 14px; margin-top: 4px;">Track financial escrows, assign bids, and overview project milestones.</p>
+        </div>
+      </div>
+
+      <!-- Main Tab Content Area (Managed dynamically via dashboard.js) -->
+      <div id="dashboard-main-view" style="display: flex; flex-direction: column; gap: 24px;">
+        <div style="text-align: center; color: var(--gray-600); padding: 40px 0;">Mounting Workspace board...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- POP-UP MODAL: POST JOB (FOR EMPLOYERS/BUYERS) -->
+  <div class="modal-overlay" id="post-job-modal">
+    <div class="modal-box" style="max-width: 580px;">
+      <button class="modal-close-btn" id="btn-close-job-modal"><i class="fa-solid fa-xmark"></i></button>
+      <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Funding Escrow Contract</span>
+      <h3 style="font-size: 20px; font-weight: 700; margin-top: 4px; margin-bottom: 20px;">Publish Gigs Posting</h3>
+      
+      <form id="modal-job-form">
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Gigs Project Title</label>
+            <input type="text" id="job-title-input" class="form-control" placeholder="e.g. Design GrapeTask Brand Logo" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Escrow Budget ($USD)</label>
+            <input type="number" id="job-budget-input" class="form-control" placeholder="e.g. 500" min="1" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Gigs Category</label>
+            <select id="job-category-input" class="form-control" required style="cursor: pointer;">
+              <option value="Development" selected>Development & IT</option>
+              <option value="Design">Design & Art</option>
+              <option value="Writing">Writing & Translation</option>
+              <option value="Marketing">Digital Marketing</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Expected Output Assets</label>
+            <input type="text" id="job-delivery-input" class="form-control" placeholder="e.g. SVG source file + high-res PNG">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Detailed Project Specification Description</label>
+          <textarea id="job-desc-input" class="form-control" rows="4" placeholder="Brief the creative freelancer on requirements, guidelines, references, and benchmarks..." required></textarea>
+        </div>
+
+        <div style="background-color: rgba(99, 102, 241, 0.08); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 11px; color: var(--primary); text-align: center; font-weight: 600;">
+          🔒 Budget Escrow: Confirming this post transfers your listed budget out of your balance and locks it inside secure escrow, ready for disbursement upon milestone delivery.
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Post Gigs & Fund Escrow</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL: SUBMIT DELIVERABLES (FOR FREELANCERS) -->
+  <div class="modal-overlay" id="submit-work-modal">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="btn-close-work-modal"><i class="fa-solid fa-xmark"></i></button>
+      <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Contract Milestone Completion</span>
+      <h3 style="font-size: 20px; font-weight: 700; margin-top: 4px; margin-bottom: 12px;">Submit Completed Gigs Project</h3>
+      <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 20px;" id="submit-modal-job-title">Job Title</p>
+      
+      <form id="modal-work-form">
+        <input type="hidden" id="submit-modal-job-id" value="">
+
+        <div class="form-group">
+          <label class="form-label">Submission Note / Deliverables Description</label>
+          <textarea id="work-desc-input" class="form-control" rows="4" placeholder="Describe the delivered results, credentials, or file access links..." required></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label">Attachment Asset Link / URL (Optional)</label>
+          <input type="url" id="work-file-input" class="form-control" placeholder="e.g. https://github.com/my-portfolio-build">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label">Or Drag & Drop Upload Deliverable Archive (ZIP, RAR, PNG, PDF)</label>
+          <div id="dropzone-submit-milestone" style="border: 2px dashed var(--gray-300); border-radius: 12px; padding: 25px 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: var(--gray-50);" ondragover="event.preventDefault(); this.style.borderColor='var(--primary)'; this.style.background='rgba(99,102,241,0.05)';" ondragleave="this.style.borderColor='var(--gray-300)'; this.style.background='var(--gray-50)';" ondrop="event.preventDefault(); this.style.borderColor='var(--gray-300)'; this.style.background='var(--gray-50)'; if(event.dataTransfer.files.length) { window.handleDropDeliverable(event.dataTransfer.files[0]); }">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: var(--primary); margin-bottom: 10px; opacity: 0.8;"></i>
+            <p style="font-size: 13px; font-weight: 700; margin: 0; color: var(--dark);">Drag and drop milestone files here or <span style="color: var(--primary); text-decoration: underline;">browse filesystem</span></p>
+            <p style="font-size: 11px; color: var(--gray-500); margin-top: 5px;">Package files, code repositories, or style graphics up to 35MB</p>
+            <div id="dropzone-file-feedback" style="margin-top: 10px; font-size: 12px; font-weight: 800; color: var(--success); display: none; background: rgba(16,185,129,0.08); padding: 8px; border-radius: 6px; border: 1px solid rgba(16,185,129,0.2);"></div>
+          </div>
+          <input type="file" id="dropzone-hidden-file-input" style="display: none;" onchange="if(this.files.length) { window.handleDropDeliverable(this.files[0]); }">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Deliver Work Components</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reusable modular footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Central JS files -->
+  <script src="/assets/js/main.js"></script>
+  
+  <script>
+    // Injected component bootstrap helper for Sidebar loading
+    async function injectSidebar() {
+      const placeholder = document.getElementById('sidebar-placeholder');
+      if (placeholder) {
+        try {
+          const resp = await fetch('/components/sidebar.html');
+          if (resp.ok) {
+            placeholder.innerHTML = await resp.text();
+            
+            // Connect Logout buttons automatically in injected views
+            document.getElementById('sidebar-btn-logout')?.addEventListener('click', performLogout);
+          }
+        } catch (err) {
+          console.error("Sidebar loading error: ", err);
+        }
+      }
+    }
+    
+    // Defer script load until layout bootstrap finishes
+    setTimeout(() => {
+      injectSidebar().then(() => {
+        const script = document.createElement('script');
+        script.src = '/assets/js/dashboard.js';
+        document.body.appendChild(script);
+        
+        setTimeout(() => { lucide.createIcons(); }, 300);
+      });
+    }, 400);
+  </script>
+</body>
+</html>

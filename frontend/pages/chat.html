@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages Inbox | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    (function() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) {
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* Chat layout styling values */
+    .chat-inbox-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      height: calc(100vh - 73px);
+      background-color: white;
+    }
+
+    .chat-sidebar {
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .chat-conversations-viewport {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--light);
+    }
+
+    .chat-messages-scrollarea {
+      flex-grow: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background-color: #f1f5f9;
+    }
+
+    .chat-input-toolbar {
+      padding: 20px 30px;
+      border-top: 1px solid var(--gray-200);
+      background: white;
+    }
+
+    @media (max-width: 768px) {
+      .chat-inbox-grid {
+        grid-template-columns: 1fr;
+      }
+      .chat-sidebar {
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <!-- Chat System Grid -->
+  <main class="chat-inbox-grid" id="chat-channels-container">
+    
+    <!-- Contacts Sidebar thread lists -->
+    <section class="chat-sidebar">
+      <div style="padding: 20px; border-bottom: 1px solid var(--gray-200); background-color: var(--light);">
+        <h3 style="font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+          Ongoing Conversations
+          <span id="inbox-unread-badge" style="display: none; background-color: #ef4444; color: white; border-radius: 9999px; font-size: 11px; padding: 2px 7px; font-weight: 700; min-width: 18px; text-align: center; line-height: 1;">0</span>
+        </h3>
+        <p style="font-size: 11px; color: var(--gray-600); margin-top: 4px; margin-bottom: 0;">Select a chat connection thread to start messaging.</p>
+      </div>
+
+      <!-- Scrollable channels contacts list -->
+      <div id="chat-contacts-list" style="flex-grow: 1; overflow-y: auto;">
+        <div style="text-align: center; padding: 40px; color: var(--gray-600); font-size: 13px;">
+          Synchronizing chat threads...
+        </div>
+      </div>
+    </section>
+
+    <!-- Dialog history scroll container -->
+    <section class="chat-conversations-viewport">
+      
+      <!-- Current partner bar -->
+      <div style="padding: 16px 30px; border-bottom: 1px solid var(--gray-200); background-color: white; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div id="partner-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--gray-400); transition: background-color 0.3s ease;"></div>
+          <div>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0; line-height: 1.2;" id="chat-partner-name">Message Inbox</h3>
+            <span id="chat-room-info" style="font-size: 12px; color: var(--gray-500); display: block;">Select a conversation to start typing</span>
+          </div>
+        </div>
+        <span style="font-size: 11px; font-weight: 700; color: var(--gray-600); text-transform: uppercase;">🔒 Escrow Chat Channel</span>
+      </div>
+
+      <!-- Scrolling bubbles area -->
+      <div class="chat-messages-scrollarea" id="chat-messages-scroll">
+        <div style="text-align: center; padding: 80px 0; color: var(--gray-600);">
+          <p style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Escrow Messaging System</p>
+          <p style="font-size: 13px; max-width: 400px; margin: 0 auto;">Select an expert or buyer thread in the left sidebar directory to review files, coordinate deliverables, or ask questions.</p>
+        </div>
+      </div>
+
+      <!-- Real-Time Typing Indicator Area -->
+      <div id="typing-indicator" style="display: none; padding: 6px 30px; font-size: 12px; color: var(--primary); font-style: italic; background-color: #f8fafc; border-top: 1px solid var(--gray-100); transition: all 0.2s ease;">
+        @freelancer is typing...
+      </div>
+
+      <!-- Text Inputs toolbar area -->
+      <div class="chat-input-toolbar">
+        <!-- Live Upload/File Preview Container -->
+        <div id="chat-upload-preview" style="display: none; padding: 10px 15px; background-color: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+            <i class="fa-solid fa-file-arrow-up" style="font-size: 20px; color: var(--primary);"></i>
+            <div style="min-width: 0;">
+              <p id="preview-filename" style="margin: 0; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--dark);"></p>
+              <p id="preview-filesize" style="margin: 0; font-size: 11px; color: var(--gray-500);"></p>
+            </div>
+          </div>
+          <button type="button" id="cancel-upload-btn" class="btn btn-link" style="padding: 0; color: #ef4444; text-decoration: none; font-size: 18px; border: none; background: transparent;">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+
+        <form id="chat-send-form" style="display: flex; gap: 12px; align-items: center;">
+          <input type="file" id="chat-file-input" style="display: none;">
+          
+          <button type="button" id="chat-attachment-btn" class="btn btn-light" style="border-radius: 50%; width: 44px; height: 44px; padding: 0; flex-shrink: 0; border: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: center; background-color: white; color: var(--gray-600); cursor: pointer;">
+            <i class="fa-solid fa-paperclip" style="font-size: 16px;"></i>
+          </button>
+
+          <button type="button" id="chat-emoji-btn" class="btn btn-light" style="border-radius: 50%; width: 44px; height: 44px; padding: 0; flex-shrink: 0; border: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: center; background-color: white; color: var(--gray-600); position: relative; cursor: pointer;">
+            <i class="fa-solid fa-face-smile" style="font-size: 16px;"></i>
+            <!-- Emoji Menu Popover (hidden by default) -->
+            <div id="emoji-popover" style="display: none; position: absolute; bottom: 55px; left: 0; background: white; border: 1px solid var(--gray-200); border-radius: 8px; box-shadow: var(--shadow-lg); padding: 8px; grid-template-columns: repeat(4, 1fr); gap: 6px; z-index: 1000; width: 180px;">
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">👍</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">❤️</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">😂</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">🔥</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">👏</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">🎉</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">🚀</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">💡</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">✅</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">⭐</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">📋</span>
+              <span class="emoji-opt" style="cursor: pointer; font-size: 20px; text-align: center; display: block; padding: 4px; transition: transform 0.1s;">💬</span>
+            </div>
+          </button>
+
+          <input type="text" id="chat-message-input" autocomplete="off" class="form-control" style="border-radius: 9999px; padding: 12px 24px;" placeholder="Message text...">
+          <button type="submit" class="btn btn-primary" style="border-radius: 50%; width: 44px; height: 44px; padding: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-paper-plane" style="font-size: 16px;"></i>
+          </button>
+        </form>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/chat.js"></script>
+  <script>
+    setTimeout(() => { lucide.createIcons(); }, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet Ledger Workspace | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function() {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) {
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* Premium style improvements for wallet cards */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    
+    .metric-card-custom {
+      background: #ffffff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .metric-card-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    
+    .metric-card-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gradient);
+    }
+
+    .metric-card-custom.pending::before {
+      background: var(--warning);
+    }
+
+    .metric-card-custom.earned::before {
+      background: var(--success);
+    }
+    
+    .card-icon-bg {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 32px;
+      opacity: 0.12;
+      color: var(--primary);
+    }
+    
+    .action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .btn-deposit {
+      background-color: rgba(99, 102, 241, 0.1);
+      color: var(--primary);
+      border: 1px dashed var(--primary);
+    }
+    
+    .btn-deposit:hover {
+      background-color: var(--primary);
+      color: white;
+      border-style: solid;
+    }
+    
+    /* Transaction table improvements */
+    .table-container {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+    
+    .txn-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    
+    .txn-table th {
+      background-color: var(--gray-100);
+      color: var(--gray-700);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 16px 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .txn-table td {
+      padding: 16px 20px;
+      border-top: 1px solid var(--gray-200);
+      font-size: 14px;
+      color: var(--gray-700);
+    }
+    
+    .txn-id-badge {
+      font-family: monospace;
+      font-weight: 700;
+      background: var(--gray-100);
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    .txn-id-badge:hover {
+      background: var(--gray-300);
+    }
+    
+    /* Status Pill Styles */
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    
+    .pill-escrow {
+      background-color: rgba(245, 158, 11, 0.12);
+      color: var(--warning);
+    }
+    
+    .pill-released {
+      background-color: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+    }
+    
+    .pill-cancelled {
+      background-color: rgba(239, 68, 68, 0.12);
+      color: var(--error);
+    }
+
+    .pill-pending {
+      background-color: var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    /* Modal loading simulation */
+    .loader-spinner {
+      border: 3px solid rgba(99, 102, 241, 0.1);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+      margin: 24px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reusable modular header navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Primary Dashboard Split Panel Layout -->
+  <main class="dashboard-layout">
+    
+    <!-- Sidebar template placeholder injected via main.js -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Operations workspace screen -->
+    <section class="dashboard-content">
+      <div class="welcome-header">
+        <div>
+          <h2>Working Wallet &amp; Ledger</h2>
+          <p style="color: var(--gray-600); font-size: 14px; margin-top: 4px;">Submit mock payout transfers, audit escrow holds, and inspect detailed real-time transaction ledger balances.</p>
+        </div>
+      </div>
+
+      <!-- Core Ledger Metrics Grid -->
+      <div class="metric-grid">
+        <!-- Card 1: Available Balance -->
+        <div class="metric-card-custom shadow">
+          <div class="card-icon-bg"><i class="fa-solid fa-wallet"></i></div>
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Available Cash Balance</span>
+          <h1 style="font-size: 36px; font-weight: 800; color: var(--dark); margin-top: 6px; margin-bottom: 12px;" id="available-balance">$1,000.00</h1>
+          <div class="action-row">
+            <button class="btn btn-primary" id="btn-withdraw-trigger" style="flex: 1; font-size: 13px;"><i class="fa-solid fa-money-bill-transfer"></i> Withdraw Earnings</button>
+            <button class="btn btn-deposit" id="btn-deposit-trigger" style="font-size: 13px;"><i class="fa-solid fa-circle-plus"></i> Top Up</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Escrow Locked Hold -->
+        <div class="metric-card-custom pending shadow">
+          <div class="card-icon-bg"><i class="fa-solid fa-lock"></i></div>
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Pending Escrow Hold</span>
+          <h1 style="font-size: 36px; font-weight: 800; color: var(--warning); margin-top: 6px; margin-bottom: 12px;" id="pending-escrow">$0.00</h1>
+          <div style="font-size: 12px; color: var(--gray-600);">Funds guarded securely until deliverable milestones are signed off.</div>
+        </div>
+
+        <!-- Card 3: Total Lifetime Accumulated Revenues -->
+        <div class="metric-card-custom earned shadow">
+          <div class="card-icon-bg"><i class="fa-solid fa-chart-line"></i></div>
+          <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Total Lifetime Revenue</span>
+          <h1 style="font-size: 36px; font-weight: 800; color: var(--success); margin-top: 6px; margin-bottom: 12px;" id="lifetime-revenue">$0.00</h1>
+          <div style="font-size: 12px; color: var(--gray-600);">Cumulative earnings credited on completed contract assignments.</div>
+        </div>
+      </div>
+
+      <!-- Simulated Escrow Center Panel -->
+      <div class="card" style="margin-bottom: 30px; border-left: 5px solid var(--primary);">
+        <h3 style="font-size: 18px; margin-bottom: 6px;"><i class="fa-solid fa-shield-halved text-gradient"></i> Dynamic Escrow Controller Sandbox</h3>
+        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 18px;">Quickly test Farelancer's secure payment flows. Approve or trigger escrow actions right from this dashboard.</p>
+        <div id="escrow-actions-box" style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Loaded dynamically via wallet.js -->
+          <div style="text-align: center; color: var(--gray-600); padding: 50px 0;">
+            <i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i> Searching active contracts context...
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed transaction ledger history table -->
+      <div style="margin-top: 30px;">
+        <h3 style="font-size: 18px; margin-bottom: 16px;"><i class="fa-solid fa-file-invoice-dollar"></i> Detailed Financial Ledger History</h3>
+        <div class="table-container">
+          <table class="txn-table" id="transactions-table">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Project / Job Reference</th>
+                <th>Involved Parties</th>
+                <th>Ledger Flow Amount</th>
+                <th>Clearance Status</th>
+                <th>Booking Date</th>
+              </tr>
+            </thead>
+            <tbody id="txn-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--gray-600); padding: 40px;">
+                  <i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Calling ledger accounts databases...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- POP-UP MODAL: WITHDRAW FUNDS -->
+  <div class="modal-overlay" id="withdraw-modal">
+    <div class="modal-box" style="max-width: 460px;">
+      <button class="modal-close-btn" id="btn-close-withdraw"><i class="fa-solid fa-xmark"></i></button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(99, 102, 241, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px;">
+          <i class="fa-solid fa-money-bill-transfer"></i>
+        </div>
+        <h3 style="font-size: 20px; font-weight: 700;">Simulated Secure Payout</h3>
+        <p style="font-size: 13px; color: var(--gray-600); margin-top: 4px;">Transfer your available cleared balance to external channels.</p>
+      </div>
+
+      <form id="payout-simulation-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-weight: 600; font-size: 12px; margin-bottom: 6px; text-transform: uppercase;">Payout Target Channel</label>
+          <select class="form-control" id="payout-method" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--gray-300);" required>
+            <option value="bank">Direct Bank Wire (*9921 Stripe Wire)</option>
+            <option value="paypal">Personal PayPal Account (@gmail.com)</option>
+            <option value="payoneer">Global Payoneer Wallet Identifier</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label style="display: block; font-weight: 600; font-size: 12px; margin-bottom: 6px; text-transform: uppercase;">Amount to Cashout ($)</label>
+          <input type="number" class="form-control" id="payout-amount" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--gray-300);" min="10" step="1" placeholder="Enter payout sum" required>
+          <p style="font-size: 11px; color: var(--gray-600); margin-top: 4px;" id="modal-max-withdrawable">Loading withdraw limit...</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;" id="btn-submit-payout">Confirm &amp; Disburse Payout</button>
+      </form>
+
+      <!-- Processing state -->
+      <div id="payout-processing" style="display: none; text-align: center; padding: 30px 0;">
+        <div class="loader-spinner"></div>
+        <h4 style="font-size: 16px; font-weight: 700;">Contacting Global Clearing House...</h4>
+        <p style="font-size: 12px; color: var(--gray-600); margin-top: 4px;">Synchronizing mock bank wire APIs.</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="payout-success" style="display: none; text-align: center; padding: 30px 0;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.15); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px;">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h4 style="font-size: 18px; font-weight: 700;">Payout Cleared Successfully!</h4>
+        <p style="font-size: 13px; color: var(--gray-600); margin-top: 6px;" id="payout-success-text">Your demo transfer is completed and registered on your ledger history table.</p>
+        <button class="btn btn-secondary" id="btn-payout-done" style="margin-top: 20px; padding: 8px 16px;">Close Window</button>
+      </div>
+    </form>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL: DEPOSIT / MOCK SYSTEM TOP UP -->
+  <div class="modal-overlay" id="deposit-modal">
+    <div class="modal-box" style="max-width: 460px;">
+      <button class="modal-close-btn" id="btn-close-deposit"><i class="fa-solid fa-xmark"></i></button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.1); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px;">
+          <i class="fa-solid fa-circle-plus"></i>
+        </div>
+        <h3 style="font-size: 20px; font-weight: 700;">Simulated Secure Deposit</h3>
+        <p style="font-size: 13px; color: var(--gray-600); margin-top: 4px;">Gain instant play funds to hire freelancers and secure job escrows.</p>
+      </div>
+
+      <form id="deposit-simulation-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-weight: 600; font-size: 12px; margin-bottom: 6px; text-transform: uppercase;">Mock Payment Source</label>
+          <select class="form-control" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--gray-300);" required>
+            <option>Simulated Credit Card (Visa *4242 Sandbox)</option>
+            <option>Bank Debit Voucher (ACH Instant Clearing)</option>
+            <option>Fake Stripe Overlay Simulation</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label style="display: block; font-weight: 600; font-size: 12px; margin-bottom: 6px; text-transform: uppercase;">Top Up Amount ($)</label>
+          <input type="number" class="form-control" id="deposit-amount" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--gray-300);" min="50" max="5000" step="50" value="500" required>
+          <p style="font-size: 11px; color: var(--gray-600); margin-top: 4px;">Demo funds credit instantly to test our platform.</p>
+        </div>
+
+        <button type="submit" class="btn btn-success" style="width: 100%; padding: 12px; background-color: var(--success); color: white;" id="btn-submit-deposit">Add Play Funds</button>
+      </form>
+
+      <!-- Processing state -->
+      <div id="deposit-processing" style="display: none; text-align: center; padding: 30px 0;">
+        <div class="loader-spinner"></div>
+        <h4 style="font-size: 16px; font-weight: 700;">Simulating Safe Checkout...</h4>
+        <p style="font-size: 12px; color: var(--gray-600); margin-top: 4px;">Connecting to credit card sandbox terminal.</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="deposit-success" style="display: none; text-align: center; padding: 30px 0;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.15); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px;">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h4 style="font-size: 18px; font-weight: 700;">Funds Deposited Successfully!</h4>
+        <p style="font-size: 13px; color: var(--gray-600); margin-top: 6px;" id="deposit-success-text">Your wallet was credited and synchronized.</p>
+        <button class="btn btn-secondary" id="btn-deposit-done" style="margin-top: 20px; padding: 8px 16px;">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL: PAYMENT CHECKOUT OVERLAY (FIVERR-STYLE CHECKOUT) -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-box" style="max-width: 480px;">
+      <button class="modal-close-btn" id="btn-close-checkout"><i class="fa-solid fa-xmark"></i></button>
+      <div id="checkout-main-content">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="color: var(--primary); font-size: 32px; margin-bottom: 8px;"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3 style="font-size: 20px; font-weight: 700;">Farelancer Secure Escrow</h3>
+          <p style="font-size: 13px; color: var(--gray-600);">Approve payment terms. Money is locked securely until delivery review.</p>
+        </div>
+
+        <div style="background-color: var(--gray-100); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+          <h4 id="checkout-job-title" style="font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px;">Website Redesign Project</h4>
+          <p id="checkout-hired-specialist" style="font-size: 12px; color: var(--gray-600); margin-bottom: 12px;">Hired Expert: @alex_dev</p>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--gray-300); padding-top: 10px; font-size: 14px;">
+            <span>Milestone Amount</span>
+            <strong id="checkout-amount" style="color: var(--primary); font-size: 16px;">$500.00</strong>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-checkout-pay" style="width: 100%; padding: 12px; font-weight: 700;"><i class="fa-solid fa-lock"></i> Authorize &amp; Fund Escrow</button>
+      </div>
+
+      <!-- Processing step -->
+      <div id="checkout-processing" style="display: none; text-align: center; padding: 30px 0;">
+        <div class="loader-spinner"></div>
+        <h4 style="font-size: 16px; font-weight: 700;">Processing secure escrow transaction...</h4>
+        <p style="font-size: 12px; color: var(--gray-600); margin-top: 4px;">Deducting funds securely. Please do not close this modal.</p>
+      </div>
+
+      <!-- Success step -->
+      <div id="checkout-success" style="display: none; text-align: center; padding: 30px 0;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.15); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px;">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h4 style="font-size: 18px; font-weight: 700;">Hired &amp; Escrow Funded!</h4>
+        <p style="font-size: 13px; color: var(--gray-600); margin-top: 6px;">Your transaction is finalized. Funds have been locked in neutral escrow. Project is officially in progress!</p>
+        <button class="btn btn-secondary" id="btn-checkout-done" style="margin-top: 24px; padding: 8px 18px;">Return to Workspace</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/wallet.js"></script>
+</body>
+</html>

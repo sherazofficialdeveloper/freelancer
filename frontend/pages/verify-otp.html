@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify security code - Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    .auth-bg {
+      min-height: calc(100vh - 73px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--gray-100);
+      background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+      padding: 40px 16px;
+    }
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 3px solid #ffffff;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .otp-input::placeholder {
+      letter-spacing: 0px !important;
+      font-size: 14px !important;
+      font-weight: 400 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <!-- Verification Card Wrap -->
+  <section class="auth-bg">
+    <div class="card" style="width: 100%; max-width: 440px; padding: 40px; border-radius: 16px; box-shadow: var(--shadow-lg);">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-size: 26px; font-weight: 800;" class="text-gradient">Verify OTP</span>
+        <p style="color: var(--gray-600); font-size: 14px; margin-top: 8px;">A security verification code was dispatched to your mail box: <strong id="display-email" style="color: var(--dark);">your-email@here.com</strong>.</p>
+      </div>
+
+      <form id="verify-form">
+        <div id="error-message" style="display: none; background-color: rgba(239, 68, 68, 0.08); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; color: var(--error); border: 1px solid rgba(239, 68, 68, 0.2); text-align: left; font-weight: 500;"></div>
+        <div id="success-message" style="display: none; background-color: rgba(16, 185, 129, 0.08); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; color: #059669; border: 1px solid rgba(16, 185, 129, 0.2); text-align: left; font-weight: 500;"></div>
+
+        <div class="form-group" style="text-align: center; margin-bottom: 24px;">
+          <label class="form-label" style="text-align: left; font-weight: 600; display: block; margin-bottom: 8px;">6-Digit OTP Code</label>
+          <input type="text" id="otp-code" class="form-control otp-input" placeholder="Enter 6-digit Code" maxlength="6" required 
+                 style="letter-spacing: 6px; text-align: center; font-weight: 800; font-size: 24px; padding: 12px; border-radius: 8px; border: 1px solid var(--gray-300); width: 100%; text-transform: uppercase;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px;">
+            <span style="color: var(--gray-600);">Expires in: <strong id="countdown-timer" style="color: var(--error);">10:00</strong></span>
+            <a href="#" id="btn-resend" style="color: var(--primary); font-weight: 700; text-decoration: none;">Resend OTP</a>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 12px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; color: white; font-weight: 700; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;">
+          <span id="spinner-element" class="spinner" style="display: none;"></span>
+          <span id="button-text">Verify Verification PIN</span>
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 25px; border-top: 1px solid var(--gray-200); padding-top: 20px;">
+        <p style="font-size: 13px; color: var(--gray-600); margin: 0;"><a href="/forgot-password" style="color: var(--primary); font-weight: 700; text-decoration: none;">← Change email</a></p>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Decode active recovery/verification email and flow type
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailQuery = urlParams.get('email');
+      const flow = urlParams.get('flow') || 'forgot'; // 'register' or 'forgot'
+      const resetEmail = emailQuery || sessionStorage.getItem('reset_email');
+
+      if (!resetEmail) {
+        window.location.href = flow === 'register' ? '/register' : '/forgot-password';
+        return;
+      }
+
+      document.getElementById('display-email').textContent = resetEmail;
+
+      const verifyForm = document.getElementById('verify-form');
+      const otpInput = document.getElementById('otp-code');
+      const errorMsg = document.getElementById('error-message');
+      const successMsg = document.getElementById('success-message');
+      const btnSubmit = document.getElementById('btn-submit');
+      const spinner = document.getElementById('spinner-element');
+      const buttonText = document.getElementById('button-text');
+      const btnResend = document.getElementById('btn-resend');
+
+      // Countdown Timer implementation (strict 10 minutes limit)
+      let secondsLeft = 600; // 10 minutes * 60 seconds
+      const countdownTimer = document.getElementById('countdown-timer');
+      
+      const timerInterval = setInterval(() => {
+        secondsLeft--;
+        const mins = Math.floor(secondsLeft / 60);
+        const secs = secondsLeft % 60;
+        countdownTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        
+        if (secondsLeft <= 0) {
+          clearInterval(timerInterval);
+          countdownTimer.textContent = 'Expired';
+          otpInput.disabled = true;
+          btnSubmit.disabled = true;
+          errorMsg.textContent = 'Verification code expired. Please resend a new OTP request.';
+          errorMsg.style.display = 'block';
+        }
+      }, 1000);
+
+      // Verify button submission handling
+      verifyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        const otp = otpInput.value.trim();
+        if (otp.length !== 6) {
+          errorMsg.textContent = 'The validation OTP must contain exactly 6 digits.';
+          errorMsg.style.display = 'block';
+          return;
+        }
+
+        btnSubmit.disabled = true;
+        spinner.style.display = 'inline-block';
+        buttonText.textContent = 'Validating...';
+
+        const endpoint = flow === 'register' ? '/api/auth/verify-email' : '/api/auth/verify-otp';
+
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: resetEmail, otp })
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            clearInterval(timerInterval);
+            if (flow === 'register') {
+              // Persist session instantly
+              localStorage.setItem('token', result.data.token);
+              localStorage.setItem('user', JSON.stringify(result.data.user));
+              document.cookie = `token=${result.data.token}; path=/; max-age=${7 * 24 * 60 * 60}; Secure; SameSite=None;`;
+              
+              successMsg.textContent = 'Email verified successfully! Welcome to Farelancer!';
+              successMsg.style.display = 'block';
+
+              setTimeout(() => {
+                window.location.href = result.data.redirectUrl || '/dashboard';
+              }, 1200);
+            } else {
+              sessionStorage.setItem('verified_otp', otp);
+              successMsg.textContent = 'PIN verified successfully! Redirecting...';
+              successMsg.style.display = 'block';
+
+              setTimeout(() => {
+                window.location.href = `/reset-password?email=${encodeURIComponent(resetEmail)}&otp=${encodeURIComponent(otp)}`;
+              }, 1200);
+            }
+          } else {
+            errorMsg.textContent = result.message || 'Verification failed. PIN code might be incorrect or expired.';
+            errorMsg.style.display = 'block';
+            btnSubmit.disabled = false;
+            spinner.style.display = 'none';
+            buttonText.textContent = 'Verify Verification PIN';
+          }
+        } catch (err) {
+          errorMsg.textContent = 'Network or connection failure. Please retry.';
+          errorMsg.style.display = 'block';
+          btnSubmit.disabled = false;
+          spinner.style.display = 'none';
+          buttonText.textContent = 'Verify Verification PIN';
+        }
+      });
+
+      // OTP Resending Trigger
+      btnResend.addEventListener('click', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        const resendEndpoint = flow === 'register' ? '/api/auth/resend-verification' : '/api/auth/forgot-password';
+
+        try {
+          const res = await fetch(resendEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: resetEmail })
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            successMsg.textContent = 'A new secure OTP code has been dispatched. Check your inbox!';
+            successMsg.style.display = 'block';
+            
+            // Console logging aid for development checking
+            if (result.data && result.data.testPin) {
+              console.log(`[DEVELOPER RESEND] Generated OTP: ${result.data.testPin}`);
+            }
+
+            // Restart timer countdown safely
+            secondsLeft = 600;
+            otpInput.disabled = false;
+            btnSubmit.disabled = false;
+          } else {
+            errorMsg.textContent = result.message || 'Unable to reissue security OTP. Please test after rate limit timeout passes.';
+            errorMsg.style.display = 'block';
+          }
+        } catch (err) {
+          errorMsg.textContent = 'Mailer connection timed out.';
+          errorMsg.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

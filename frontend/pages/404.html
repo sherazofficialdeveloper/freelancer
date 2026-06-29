@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | Farelancer</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    .error-container {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+    
+    .error-code {
+      font-size: 140px;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      letter-spacing: -4px;
+      animation: pulse 3s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Reusable modular header navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <main class="container error-container">
+    <div style="max-width: 540px;">
+      <h1 class="error-code" id="four-zero-four-banner">404</h1>
+      <h2 style="font-size: 26px; font-weight: 850; letter-spacing: -0.5px; color: var(--dark); margin-top: 10px;">Contract Path Unresolved</h2>
+      <p style="color: var(--gray-600); font-size: 15.5px; margin-top: 12px; line-height: 1.6; margin-bottom: 30px;">
+        The page you are looking for has been moved, completed, or archived under another digital ledger address. Let us get you back onto your marketplace workspace.
+      </p>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="/" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-house"></i> Back to Home
+        </a>
+        <a href="/jobs" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--gray-300); background: white;">
+          <i class="fa-solid fa-briefcase"></i> Browse Gigs Gigs
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Reusable modular footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

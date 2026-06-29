@@ -1,0 +1,6 @@
+{
+  "name": "Farelanceru",
+  "description": "A full-stack freelancing marketplace inspired by Fiverr and GrapeTask with MVC pattern.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

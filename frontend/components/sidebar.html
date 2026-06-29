@@ -1,0 +1,55 @@
+<div class="dashboard-sidebar">
+  <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+    <!-- Profile Mini Summary -->
+    <div style="background-color: var(--gray-100); border-radius: 12px; padding: 18px; text-align: center;" id="sidebar-profile-card">
+      <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--gradient); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; margin: 0 auto 10px;" id="sidebar-avatar-placeholder">
+        U
+      </div>
+      <h3 style="font-size: 16px; margin-bottom: 2px;" id="sidebar-username">Loading...</h3>
+      <p style="font-size: 12px; color: var(--gray-600); text-transform: uppercase; font-weight: 700;" id="sidebar-role">Freelancer</p>
+    </div>
+
+    <!-- Wallet Summary -->
+    <div class="wallet-card" onclick="window.location.href='/wallet'" style="cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative;" title="Click to view Wallet Dashboard">
+      <div class="wallet-title">Working Wallet <i class="fa-solid fa-chevron-right" style="font-size: 11px; float: right; margin-top: 3px;"></i></div>
+      <div class="wallet-balance" id="sidebar-wallet-balance">$0.00</div>
+      <div style="font-size: 11px; opacity: 0.9; font-weight: 600;" id="sidebar-wallet-context">
+        Demo balance ready
+      </div>
+    </div>
+
+    <!-- Nav list items -->
+    <ul class="sidebar-menu">
+      <li class="sidebar-item" id="menu-dashboard-overview">
+        <a href="/dashboard"><i class="fa-solid fa-gauge-high"></i> Overview Board</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-wallet">
+        <a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet Workspace</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-jobs">
+        <a href="/dashboard?tab=jobs"><i class="fa-solid fa-briefcase"></i> My Contracts</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-portfolio" style="display: none;">
+        <a href="/dashboard?tab=portfolio"><i class="fa-solid fa-image"></i> My Portfolio</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-gigs" style="display: none;">
+        <a href="/dashboard?tab=gigs"><i class="fa-solid fa-tags"></i> My Gigs</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-saved">
+        <a href="/dashboard?tab=saved"><i class="fa-solid fa-bookmark"></i> Saved Items</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-chat">
+        <a href="/chat"><i class="fa-solid fa-comments"></i> Chat Inbox</a>
+      </li>
+      <li class="sidebar-item" id="menu-dashboard-profile">
+        <a href="/dashboard?tab=profile"><i class="fa-solid fa-user-gear"></i> Edit Profile</a>
+      </li>
+    </ul>
+  </div>
+
+  <div style="width: 100%; margin-top: 30px;">
+    <button class="btn btn-secondary" style="width: 100%; font-weight: 600;" id="sidebar-btn-logout">
+      <i class="fa-solid fa-right-from-bracket"></i> Log Out
+    </button>
+  </div>
+</div>

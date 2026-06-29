@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farelancer Blog | Freelancing Guides & Trends</title>
+  
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Reusable Global Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Hero Banner -->
+  <section class="bg-gradient" style="padding: 70px 0; text-align: center; background: var(--gradient);">
+    <div class="container">
+      <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.15); padding: 4px 15px; border-radius: 20px; display: inline-block; margin-bottom: 12px;">Marketplace Knowledge Hub</span>
+      <h1 style="font-size: 38px; color: white; margin-bottom: 10px; font-weight: 800; font-family: var(--font-heading);">Ideas & Freelancing Guides</h1>
+      <p style="opacity: 0.9; max-width: 600px; margin: 0 auto; color: white; font-size: 15px;">Tips, tutorials, and success stories to scale your business using secure, escrow-backed milestones.</p>
+    </div>
+  </section>
+
+  <!-- Filter tabs & Content Grid -->
+  <section class="section" style="background-color: white;">
+    <div class="container">
+      
+      <!-- Category selector -->
+      <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; overflow-x: auto; padding-bottom: 5px;">
+        <button class="btn btn-secondary active-tab-btn" onclick="filterBlogs('all')" style="padding: 8px 18px; font-size: 13.5px; border-radius: 20px; font-weight: 700;">All Articles</button>
+        <button class="btn btn-secondary" onclick="filterBlogs('escrow')" style="padding: 8px 18px; font-size: 13.5px; border-radius: 20px; font-weight: 700;">Escrow & Safety</button>
+        <button class="btn btn-secondary" onclick="filterBlogs('guides')" style="padding: 8px 18px; font-size: 13.5px; border-radius: 20px; font-weight: 700;">Freelance Guides</button>
+        <button class="btn btn-secondary" onclick="filterBlogs('business')" style="padding: 8px 18px; font-size: 13.5px; border-radius: 20px; font-weight: 700;">Business Scaling</button>
+      </div>
+
+      <!-- Blogs Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;" id="blogs-container">
+        
+        <!-- Blog 1 -->
+        <div class="card blog-card" data-category="escrow-safety" style="padding: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--gray-200); background: white; display: flex; flex-direction: column;">
+          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 180px; object-fit: cover;" alt="Escrow article">
+          <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; gap: 14px;">
+            <div>
+              <span style="font-size: 11px; background: rgba(99, 102, 241, 0.08); color: var(--primary); font-weight: 800; padding: 3px 10px; border-radius: 20px;">ESCROW & SAFETY</span>
+              <h3 style="font-size: 18px; font-weight: 700; color: var(--dark); margin: 10px 0 6px auto; line-height: 1.3;">Milestone Payouts: Why Upfront Budget Locking Protects both sides</h3>
+              <p style="font-size: 13px; color: var(--gray-600); line-height: 1.5; margin: 0;">Learn how locking budgets inside Farelancer secure escrows eliminates the age-old problem of unpaid labor and payment delays.</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-100); padding-top: 12px;">
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 600;"><i class="fa-regular fa-calendar"></i> June 8, 2026</span>
+              <a href="/about" style="color: var(--primary); font-weight: 700; font-size: 13px;">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog 2 -->
+        <div class="card blog-card" data-category="guides" style="padding: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--gray-200); background: white; display: flex; flex-direction: column;">
+          <img src="https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 180px; object-fit: cover;" alt="Escrow article">
+          <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; gap: 14px;">
+            <div>
+              <span style="font-size: 11px; background: rgba(168, 85, 247, 0.08); color: var(--secondary); font-weight: 800; padding: 3px 10px; border-radius: 20px;">FREELANCE GUIDES</span>
+              <h3 style="font-size: 18px; font-weight: 700; color: var(--dark); margin: 10px 0 6px auto; line-height: 1.3;">Fiverr vs Upwork: Combining Instant Gig Selling and Long-Term Bids</h3>
+              <p style="font-size: 13px; color: var(--gray-600); line-height: 1.5; margin: 0;">Farelancer offers two options: buying preset freelancer Gigs directly for instant turnaround or posting custom Jobs in the marketplace.</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-100); padding-top: 12px;">
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 600;"><i class="fa-regular fa-calendar"></i> June 6, 2026</span>
+              <a href="/about" style="color: var(--primary); font-weight: 700; font-size: 13px;">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog 3 -->
+        <div class="card blog-card" data-category="business" style="padding: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--gray-200); background: white; display: flex; flex-direction: column;">
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 180px; object-fit: cover;" alt="Escrow article">
+          <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; gap: 14px;">
+            <div>
+              <span style="font-size: 11px; background: rgba(34, 197, 94, 0.08); color: var(--success); font-weight: 800; padding: 3px 10px; border-radius: 20px;">BUSINESS SCALING</span>
+              <h3 style="font-size: 18px; font-weight: 700; color: var(--dark); margin: 10px 0 6px auto; line-height: 1.3;">Structuring Your Milestones for Complex Web Development Jobs</h3>
+              <p style="font-size: 13px; color: var(--gray-600); line-height: 1.5; margin: 0;">Break complex tasks down into bite-sized escrow contracts. Increase trust and speed up deliverables review.</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-100); padding-top: 12px;">
+              <span style="font-size: 12px; color: var(--gray-500); font-weight: 600;"><i class="fa-regular fa-calendar"></i> May 29, 2026</span>
+              <a href="/about" style="color: var(--primary); font-weight: 700; font-size: 13px;">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Reusable Global Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="/assets/js/main.js"></script>
+  <script>
+    function filterBlogs(cat) {
+      // Setup highlighting on buttons
+      const buttons = document.querySelectorAll('.active-tab-btn, button[onclick^="filterBlogs"]');
+      buttons.forEach(btn => {
+        btn.classList.remove('active-tab-btn');
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--gray-600)';
+      });
+
+      // Find selected button
+      const clicked = [...buttons].find(b => b.outerHTML.includes(`'${cat}'`));
+      if (clicked) {
+        clicked.style.background = 'var(--primary)';
+        clicked.style.color = 'white';
+      }
+
+      const cards = document.querySelectorAll('.blog-card');
+      cards.forEach(card => {
+        if (cat === 'all') {
+          card.style.display = 'flex';
+        } else if (cat === 'escrow') {
+          card.style.display = card.getAttribute('data-category').includes('escrow') ? 'flex' : 'none';
+        } else if (cat === 'guides') {
+          card.style.display = card.getAttribute('data-category').includes('guides') ? 'flex' : 'none';
+        } else if (cat === 'business') {
+          card.style.display = card.getAttribute('data-category').includes('business') ? 'flex' : 'none';
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        if (window.lucide) { lucide.createIcons(); }
+        filterBlogs('all');
+      }, 700);
+    });
+  </script>
+</body>
+</html>
