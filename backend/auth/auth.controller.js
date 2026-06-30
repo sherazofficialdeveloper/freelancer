@@ -700,7 +700,7 @@ export const addReview = async (req, res) => {
  * GET /api/auth/google/url
  */
 export const getGoogleAuthUrl = async (req, res) => {
-  const redirectUri = `${process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback'}`;
+  const redirectUri = `${process.env.APP_URL || 'http://localhost:3000'}/api/auth/google/callback`;
   const clientId = process.env.GOOGLE_CLIENT_ID;
 
   if (!clientId) {
@@ -736,7 +736,7 @@ export const handleGoogleCallback = async (req, res) => {
   try {
     let email, name, role, avatar;
     // Real production OAuth flow
-    const redirectUri = `${process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback'}`;
+    const redirectUri = `${process.env.APP_URL || 'http://localhost:3000'}/api/auth/google/callback`;
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
