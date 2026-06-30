@@ -139,7 +139,7 @@ async function bootstrapLayout() {
             <!-- Minimal Clean Logo -->
             <a href="/" class="logo-link" style="display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800; font-family: var(--font-heading);">
               <div class="logo-orb" style="width: 28px; height: 28px; border-radius: 50%; background: var(--gradient);"></div>
-              <span class="text-gradient">Farelanceru</span>
+              <span class="text-gradient">Skillnest</span>
             </a>
             
             <!-- Right side spacer or minimal security icon -->
@@ -296,7 +296,7 @@ window.injectQuickMessageModal = function() {
       <div id="quick-msg-body" style="flex-grow: 1; min-height: 140px; max-height: 180px; padding: 16px; overflow-y: auto; background-color: var(--gray-50); display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin;">
         <div style="padding: 10px 12px; background: rgba(168, 85, 247, 0.08); border-radius: 12px; text-align: center; border: 1px dashed rgba(168, 85, 247, 0.25);">
           <p style="font-size: 11.5px; color: var(--gray-600); margin: 0; line-height: 1.4;">
-            <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 4px;"></i> Use Farelanceru secure direct escrow messaging to lock workspace details safely.
+            <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 4px;"></i> Use Skillnest secure direct escrow messaging to lock workspace details safely.
           </p>
         </div>
         <div id="quick-msg-history" style="display: flex; flex-direction: column; gap: 10px;"></div>
@@ -404,7 +404,7 @@ window.showLoginRequiredModal = function(actionType = 'access this feature') {
 
         <h3 style="font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 8px; font-family: var(--font-heading); letter-spacing: -0.5px;">Login Required</h3>
         <p style="font-size: 14px; color: var(--gray-600); line-height: 1.5; margin-bottom: 24px;">
-          You need an active Farelanceru account to <strong>${actionType}</strong>. Join our secure escrow ecosystem instantly today.
+          You need an active Skillnest account to <strong>${actionType}</strong>. Join our secure escrow ecosystem instantly today.
         </p>
 
         <!-- CTA Buttons -->
@@ -412,7 +412,7 @@ window.showLoginRequiredModal = function(actionType = 'access this feature') {
           <a href="/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}" class="btn btn-primary" style="
             display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: bold; padding: 12px; border-radius: 12px; font-size: 14.5px;
           ">
-            <i class="fa-solid fa-right-to-bracket"></i> Sign In to Farelanceru
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In to Skillnest
           </a>
           <a href="/register" class="btn btn-secondary" style="
             display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: bold; padding: 12px; border-radius: 12px; font-size: 14.5px; background: white; border-color: var(--gray-300); color: var(--dark);

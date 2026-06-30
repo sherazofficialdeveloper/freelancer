@@ -1,5 +1,5 @@
 /**
- * Farelanceru Enterprise Administration Control Panel Logic
+ * Skillnest Enterprise Administration Control Panel Logic
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnBannerSeed) btnBannerSeed.addEventListener('click', triggerDatabaseSeeding);
 
   async function triggerDatabaseSeeding() {
-    if (!confirm('Warning: Seed Farelanceru sandbox with curated mock database profiles, active jobs, escrows and disputes?')) return;
+    if (!confirm('Warning: Seed Skillnest sandbox with curated mock database profiles, active jobs, escrows and disputes?')) return;
     
     try {
       const res = await fetch('/api/admin/seed', {
@@ -747,7 +747,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (freelancers.length === 0) {
           body.innerHTML = `
             <tr>
-              <td colspan="6" style="text-align: center; color: var(--gray-600); padding: 40px;">No registered Freelancers found on Farelanceru.</td>
+              <td colspan="6" style="text-align: center; color: var(--gray-600); padding: 40px;">No registered Freelancers found on Skillnest.</td>
             </tr>
           `;
           return;
@@ -1112,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div><b>Billed Employer:</b> @${customer} (${p.payer ? p.payer.email : 'No email'})</div>
             <div><b>Remit Contractor:</b> @${merchant} (${p.receiver ? p.receiver.email : 'No email'})</div>
             <div><b>Settlement Value:</b> <span style="font-weight: 800; font-family: monospace;">$${p.amount.toFixed(2)} USD</span></div>
-            <div><b>Farelanceru Tax (3% commission):</b> $${(p.amount * 0.03).toFixed(2)}</div>
+            <div><b>Skillnest Tax (3% commission):</b> $${(p.amount * 0.03).toFixed(2)}</div>
             <div><b>Ledger Status:</b> <span style="color: var(--success); font-weight: 700; text-transform: uppercase;">${p.status}</span></div>
             <div><b>Final Clearance Timestamp:</b> ${clearingDate}</div>
           </div>
@@ -1587,9 +1587,9 @@ document.addEventListener('DOMContentLoaded', async () => {
        const result = await res.json();
        if (result.success && result.data && result.data.config) {
          const cfg = result.data.config;
-         document.getElementById('cfg_siteName').value = cfg.siteName || 'Farelanceru Platform';
+         document.getElementById('cfg_siteName').value = cfg.siteName || 'Skillnest Platform';
          document.getElementById('cfg_commissionPct').value = cfg.commissionPct || 5;
-         document.getElementById('cfg_supportEmail').value = cfg.supportEmail || 'support@farelanceru.com';
+         document.getElementById('cfg_supportEmail').value = cfg.supportEmail || 'support@Skillnest.com';
          document.getElementById('cfg_sandboxMode').checked = !!cfg.sandboxMode;
          document.getElementById('cfg_stripeKey').value = cfg.stripeKey || '••••••••••••••••••••••••••••••••••••';
          document.getElementById('cfg_auditMode').value = cfg.auditMode || 'permissive';
@@ -1608,7 +1608,7 @@ document.addEventListener('DOMContentLoaded', async () => {
          document.getElementById('cfg_maintenanceMode').checked = !!cfg.maintenanceMode;
 
          // Also sync local storage for client-side templates that consume this
-         localStorage.setItem('farelanceru_sys_cfg', JSON.stringify(cfg));
+         localStorage.setItem('Skillnest_sys_cfg', JSON.stringify(cfg));
        }
     } catch (err) {
        console.error('Failed fetching settings from API:', err);
@@ -1650,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', async () => {
          });
          const result = await res.json();
          if (result.success) {
-           localStorage.setItem('farelanceru_sys_cfg', JSON.stringify(cfgBag));
+           localStorage.setItem('Skillnest_sys_cfg', JSON.stringify(cfgBag));
            showToast('Platform administrative presets saved securely on the server!', 'success');
            pushSystemIncident('CONFIG MODERNIZED', 'Platform administrative presets modernized successfully.', 'success');
          } else {
@@ -2370,7 +2370,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       bodyWrap: 'border-left: 4px solid #ef4444; padding-left: 12px; background: #fff5f5;'
     },
     welcome: {
-      title: 'Welcome to the Farelanceru Family!',
+      title: 'Welcome to the Skillnest Family!',
       logoStyle: 'color: #f59e0b;',
       bodyWrap: 'border-left: 4px solid #f59e0b; padding-left: 12px; font-style: italic;'
     },
