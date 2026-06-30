@@ -65,7 +65,7 @@ const initDashboard = async () => {
     currentUser = resData.data.user;
     
     const cleanEmail = currentUser.email ? currentUser.email.trim().toLowerCase() : '';
-    if (cleanEmail === 'raisheraz7181@gmail.com' || cleanEmail === 'ficerdigitalagency@gmail.com' || currentUser.role === 'admin') {
+    if (cleanEmail === 'maqboolusama9@gmail.com' || cleanEmail === 'usamamaqboolassiii@gmail.com' || currentUser.role === 'admin') {
       currentUser.role = 'admin';
     }
     

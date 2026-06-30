@@ -92,7 +92,7 @@ function initializeAuth() {
       window.FarelanceruState.user = JSON.parse(localUserStr);
       if (window.FarelanceruState.user && window.FarelanceruState.user.email) {
         const cleanEmail = window.FarelanceruState.user.email.trim().toLowerCase();
-        if (cleanEmail === 'raisheraz7181@gmail.com' || cleanEmail === 'ficerdigitalagency@gmail.com' || window.FarelanceruState.user.role === 'admin') {
+        if (cleanEmail === 'maqboolusama9@gmail.com' || cleanEmail === 'usamamaqboolassiii@gmail.com' || window.FarelanceruState.user.role === 'admin') {
           if (window.FarelanceruState.user.role !== 'admin') {
             window.FarelanceruState.user.role = 'admin';
             localStorage.setItem('user', JSON.stringify(window.FarelanceruState.user));

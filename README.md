@@ -119,3 +119,4 @@ Farelanceru enforces transaction clarity. Rather than sending wire transfers or 
 2. **Accept & Hire**: When a proposal bid is approved, the escrow funds are bound directly to the hired talent's progress ledger.
 3. **Delivery Review**: The talent uploads completed deliverables.
 4. **Escrow Disbursed**: Payout is delivered to the talent's available balance upon employer approval.
+# freelancer

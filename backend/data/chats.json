@@ -1,0 +1,15 @@
+[
+  {
+    "chatId": "direct_id_i6r1swnh5_id_i6wxw11q2",
+    "jobId": "direct",
+    "senderId": "id_i6wxw11q2",
+    "receiverId": "id_i6r1swnh5",
+    "sender": "id_i6wxw11q2",
+    "receiver": "id_i6r1swnh5",
+    "message": "hey",
+    "timestamp": "2026-06-29T06:00:26.788Z",
+    "_id": "id_lrkxs2bdg",
+    "createdAt": "2026-06-29T06:00:26.788Z",
+    "updatedAt": "2026-06-29T06:00:26.789Z"
+  }
+]

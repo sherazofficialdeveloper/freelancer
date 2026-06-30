@@ -1,0 +1,20 @@
+[
+  {
+    "user": "id_i6wxw11q2",
+    "subject": "Stripe wallet payouts bank verification issues.",
+    "status": "open",
+    "messages": [
+      {
+        "sender": "maqboolusama9",
+        "message": "I cannot link my local bank credentials. Is Plaid supported for identity matches?"
+      },
+      {
+        "sender": "System Operator (Admin Support)",
+        "message": "Currently Plaid triggers are in sandbox. Please proceed through the bank accounts settings pane."
+      }
+    ],
+    "_id": "id_spxlcrkjf",
+    "createdAt": "2026-06-29T06:17:33.260Z",
+    "updatedAt": "2026-06-29T06:17:33.260Z"
+  }
+]

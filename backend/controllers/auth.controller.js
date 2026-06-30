@@ -29,7 +29,7 @@ export const register = async (req, res) => {
     // Default buyer starts with $2000 to post jobs! Freelancer starts with $0.
     let userRole = role;
     const cleanEmail = email ? email.trim().toLowerCase() : '';
-    if (cleanEmail === 'raisheraz7181@gmail.com' || cleanEmail === 'ficerdigitalagency@gmail.com') {
+    if (cleanEmail === 'maqboolusama9@gmail.com' || cleanEmail === 'usamamaqboolassiii@gmail.com') {
       userRole = 'admin';
     }
     const startingBalance = userRole === 'buyer' ? 2000 : (userRole === 'admin' ? 100000 : 100);
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
 
     // Force Admin promotion for the authorized email
     const cleanEmailLog = user.email ? user.email.trim().toLowerCase() : '';
-    if ((cleanEmailLog === 'raisheraz7181@gmail.com' || cleanEmailLog === 'ficerdigitalagency@gmail.com') && user.role !== 'admin') {
+    if ((cleanEmailLog === 'maqboolusama9@gmail.com' || cleanEmailLog === 'usamamaqboolassiii@gmail.com') && user.role !== 'admin') {
       user.role = 'admin';
       await user.save();
     }

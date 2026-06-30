@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const freshUser = resData.data.user;
 
     const freshEmail = freshUser && freshUser.email ? freshUser.email.trim().toLowerCase() : '';
-    const isOwnerAdmin = freshEmail === 'raisheraz7181@gmail.com' || freshEmail === 'ficerdigitalagency@gmail.com' || (freshUser && freshUser.role === 'admin');
+    const isOwnerAdmin = freshEmail === 'maqboolusama9@gmail.com' || freshEmail === 'usamamaqboolassiii@gmail.com' || (freshUser && freshUser.role === 'admin');
 
     if (!isOwnerAdmin) {
       rejectSession('You do not have administrative privilege clearance.');

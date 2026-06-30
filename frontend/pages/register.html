@@ -30,9 +30,143 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: var(--gray-100);
+      background-color: #f8fafc;
       background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
       padding: 60px 0;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+      padding: 0;
+    }
+
+    .auth-info-panel {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: white;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-info-panel::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .auth-info-content {
+      position: relative;
+      z-index: 5;
+    }
+
+    .auth-badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--secondary);
+      background-color: rgba(168, 85, 247, 0.15);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+
+    .auth-info-panel h2 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: white;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .auth-info-panel p {
+      font-size: 15px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .auth-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .auth-feature-item h4 {
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .auth-feature-item p {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .auth-form-card {
+      background: white;
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (max-width: 968px) {
+      .auth-container {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin: 0 16px;
+      }
+      .auth-info-panel {
+        display: none !important;
+      }
+      .auth-form-card {
+        padding: 40px;
+      }
     }
   </style>
 </head>
@@ -42,78 +176,109 @@
 
   <!-- Sign Up Card Box -->
   <section class="auth-bg">
-    <div class="card" style="width: 100%; max-width: 460px; padding: 40px; border-radius: 16px; box-shadow: var(--shadow-lg);">
-      <div style="text-align: center; margin-bottom: 25px;">
-        <span style="font-size: 26px; font-weight: 800;" class="text-gradient">Join Farelancer</span>
-        <p style="color: var(--gray-600); font-size: 14px; margin-top: 6px;">Collaborate securely with dynamic escrow clearance contracts.</p>
-      </div>
-
-      <form id="register-form">
-        <div id="register-error" style="display: none; background-color: rgba(239, 68, 68, 0.08); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; color: var(--error); border: 1px solid rgba(239, 68, 68, 0.2); text-align: left; font-weight: 500;"></div>
-
-        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-          <div class="form-group" style="flex: 1; margin: 0;">
-            <label class="form-label">First Name</label>
-            <input type="text" id="reg-firstname" class="form-control" placeholder="e.g. John" required>
-          </div>
-          <div class="form-group" style="flex: 1; margin: 0;">
-            <label class="form-label">Last Name</label>
-            <input type="text" id="reg-lastname" class="form-control" placeholder="e.g. Doe" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" id="reg-email" class="form-control" placeholder="e.g. testing@gmail.com" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Workspace Account Role</label>
-          <select id="reg-role" class="form-control" style="cursor: pointer;" required>
-            <option value="freelancer" selected>🎨 Expert Freelancer (Bids and delivers projects)</option>
-            <option value="buyer">💼 Project Client / Buyer (Posts gigs and hires experts)</option>
-          </select>
-        </div>
-
-        <div style="display: flex; gap: 12px; margin-bottom: 24px;">
-          <div class="form-group" style="flex: 1; margin: 0;">
-            <label class="form-label">Password</label>
-            <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required>
-          </div>
-          <div class="form-group" style="flex: 1; margin: 0;">
-            <label class="form-label">Confirm Password</label>
-            <input type="password" id="reg-confirmpassword" class="form-control" placeholder="••••••••" required>
+    <div class="auth-container">
+      
+      <!-- Left: SaaS Marketing Panel -->
+      <div class="auth-info-panel">
+        <div class="auth-info-content">
+          <span class="auth-badge">✨ Multi-Role Workspace</span>
+          <h2>The future of freelance work starts here.</h2>
+          <p>Join our thriving ecosystem as either an Expert Freelancer to find high-paying escrow-backed contracts, or a Client to hire top talent globally.</p>
+          
+          <div class="auth-features-list">
+            <div class="auth-feature-item">
+              <div class="feature-icon"><i class="fa-solid fa-briefcase"></i></div>
+              <div>
+                <h4>Verified Deliveries</h4>
+                <p>Submit work milestones directly inside your dashboard and secure prompt verification.</p>
+              </div>
+            </div>
+            
+            <div class="auth-feature-item">
+              <div class="feature-icon"><i class="fa-solid fa-rocket"></i></div>
+              <div>
+                <h4>Global Talent Pool</h4>
+                <p>Gain access to experienced creatives, developers, and writers instantly.</p>
+              </div>
+            </div>
           </div>
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 12px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; color: white; font-weight: 700; cursor: pointer; border-radius: 8px;">Create Account</button>
-      </form>
-
-      <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--gray-400); font-size: 12px; font-weight: 600; text-transform: uppercase;">
-        <div style="flex-grow: 1; height: 1px; background: var(--gray-200);"></div>
-        <span>Or connect with</span>
-        <div style="flex-grow: 1; height: 1px; background: var(--gray-200);"></div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button type="button" id="btn-google-login" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; padding: 10px; border: 1px solid var(--gray-300); background: white; color: var(--dark); font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-          <i class="fa-brands fa-google" style="color: #4285F4; font-size: 16px;"></i>
-          Sign Up with Google
-        </button>
+      <!-- Right: Sign Up Form Card -->
+      <div class="auth-form-card">
+        <div style="text-align: center; margin-bottom: 25px;">
+          <span style="font-size: 26px; font-weight: 800;" class="text-gradient">Join Farelancer</span>
+          <p style="color: var(--gray-600); font-size: 14px; margin-top: 6px;">Collaborate securely with dynamic escrow clearance contracts.</p>
+        </div>
 
-        <button type="button" id="btn-facebook-login" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; padding: 10px; border: 1px solid var(--gray-300); background: white; color: var(--dark); font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-          <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 16px;"></i>
-          Sign Up with Facebook
-        </button>
-      </div>
+        <form id="register-form">
+          <div id="register-error" style="display: none; background-color: rgba(239, 68, 68, 0.08); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; color: var(--error); border: 1px solid rgba(239, 68, 68, 0.2); text-align: left; font-weight: 500;"></div>
 
-      <!-- Testing alert badge -->
-      <div style="background-color: rgba(99, 102, 241, 0.08); border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 11px; color: var(--primary); text-align: center; font-weight: 600;">
-        💡 Demo Feature: Buyers get $2,000 and Freelancers get $100 starting balance automatically to test the Escrow mechanics!
-      </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div class="form-group" style="flex: 1; margin: 0;">
+              <label class="form-label">First Name</label>
+              <input type="text" id="reg-firstname" class="form-control" placeholder="e.g. John" required>
+            </div>
+            <div class="form-group" style="flex: 1; margin: 0;">
+              <label class="form-label">Last Name</label>
+              <input type="text" id="reg-lastname" class="form-control" placeholder="e.g. Doe" required>
+            </div>
+          </div>
 
-      <div style="text-align: center; margin-top: 25px; border-top: 1px solid var(--gray-200); padding-top: 20px;">
-        <p style="font-size: 13px; color: var(--gray-600);">Already have an account? <a href="/login" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Sign in instead</a></p>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="e.g. testing@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Workspace Account Role</label>
+            <select id="reg-role" class="form-control" style="cursor: pointer;" required>
+              <option value="freelancer" selected>🎨 Expert Freelancer (Bids and delivers projects)</option>
+              <option value="buyer">💼 Project Client / Buyer (Posts gigs and hires experts)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+            <div class="form-group" style="flex: 1; margin: 0;">
+              <label class="form-label">Password</label>
+              <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <div class="form-group" style="flex: 1; margin: 0;">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" id="reg-confirmpassword" class="form-control" placeholder="••••••••" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 12px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; color: white; font-weight: 700; cursor: pointer; border-radius: 8px;">Create Account</button>
+        </form>
+
+        <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--gray-400); font-size: 12px; font-weight: 600; text-transform: uppercase;">
+          <div style="flex-grow: 1; height: 1px; background: var(--gray-200);"></div>
+          <span>Or connect with</span>
+          <div style="flex-grow: 1; height: 1px; background: var(--gray-200);"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button type="button" id="btn-google-login" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; padding: 10px; border: 1px solid var(--gray-300); background: white; color: var(--dark); font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+            <i class="fa-brands fa-google" style="color: #4285F4; font-size: 16px;"></i>
+            Sign Up with Google
+          </button>
+
+          <button type="button" id="btn-facebook-login" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; padding: 10px; border: 1px solid var(--gray-300); background: white; color: var(--dark); font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+            <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 16px;"></i>
+            Sign Up with Facebook
+          </button>
+        </div>
+
+        <!-- Testing alert badge -->
+        <div style="background-color: rgba(99, 102, 241, 0.08); border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 11px; color: var(--primary); text-align: center; font-weight: 600;">
+          💡 Demo Feature: Buyers get $2,000 and Freelancers get $100 starting balance automatically to test the Escrow mechanics!
+        </div>
+
+        <div style="text-align: center; margin-top: 25px; border-top: 1px solid var(--gray-200); padding-top: 20px;">
+          <p style="font-size: 13px; color: var(--gray-600);">Already have an account? <a href="/login" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Sign in instead</a></p>
+        </div>
       </div>
     </div>
   </section>

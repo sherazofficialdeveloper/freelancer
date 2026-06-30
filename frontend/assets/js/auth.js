@@ -431,7 +431,7 @@ window.checkGuardAuth = function() {
 
     // Standard promotion of admin emails
     const cleanEmail = user && user.email ? user.email.trim().toLowerCase() : '';
-    const isAdmin = cleanEmail === 'raisheraz7181@gmail.com' || cleanEmail === 'ficerdigitalagency@gmail.com' || (user && user.role === 'admin');
+    const isAdmin = cleanEmail === 'maqboolusama9@gmail.com' || cleanEmail === 'usamamaqboolassiii@gmail.com' || (user && user.role === 'admin');
     if (isAdmin && user) {
       user.role = 'admin';
       localStorage.setItem('user', JSON.stringify(user));

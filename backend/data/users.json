@@ -8,6 +8,72 @@
     "isVerified": true,
     "_id": "id_i6wxw11q2",
     "createdAt": "2026-06-28T20:21:48.492Z",
-    "updatedAt": "2026-06-28T20:21:48.500Z"
+    "updatedAt": "2026-06-29T05:30:37.784Z",
+    "resetCode": "124120",
+    "resetCodeExpires": "2026-06-29T05:40:37.783Z",
+    "lastOtpRequestedAt": "2026-06-29T05:30:37.783Z"
+  },
+  {
+    "name": "Usama Assi",
+    "username": "usama_assi",
+    "email": "usamamaqboolassi@gmail.com",
+    "password": "$2b$10$1bDUMNRrNfQHymbDvv1NN.QuMiStF1APHDKFXFe5E/tSKNJn6HjaW",
+    "role": "freelancer",
+    "balance": 100,
+    "status": "active",
+    "profile": {
+      "title": "Expert Creative Professional",
+      "bio": "Welcome to my Farelancer profile page!",
+      "skills": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "hourlyRate": 25
+    },
+    "_id": "id_i6r1swnh5",
+    "createdAt": "2026-06-29T04:46:58.396Z",
+    "updatedAt": "2026-06-29T05:30:24.071Z",
+    "verificationOtp": "833856",
+    "verificationOtpExpires": "2026-06-29T05:03:37.718Z",
+    "lastOtpRequestedAt": "2026-06-29T05:30:24.067Z",
+    "resetCode": "461690",
+    "resetCodeExpires": "2026-06-29T05:40:24.067Z"
+  },
+  {
+    "name": "sheraz Ali",
+    "username": "sheraz_ali",
+    "email": "raisheraz7181@gmail.com",
+    "password": "$2b$10$YUa1rrWp1Qg/c0.6/nfy0OPGtoo4BYIAJf1Jlk9r.BIFV2ZCvPCAS",
+    "role": "freelancer",
+    "balance": 100,
+    "status": "active",
+    "profile": {
+      "title": "Expert Creative Professional",
+      "bio": "Welcome to my Farelancer profile page!",
+      "skills": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "hourlyRate": 25
+    },
+    "_id": "id_154vu97uj",
+    "createdAt": "2026-06-29T05:16:15.620Z",
+    "updatedAt": "2026-06-29T05:20:32.403Z",
+    "verificationOtp": "885873",
+    "verificationOtpExpires": "2026-06-29T05:35:32.402Z",
+    "lastOtpRequestedAt": "2026-06-29T05:20:32.402Z"
+  },
+  {
+    "name": "Usama Maqbool",
+    "username": "usamapaktv",
+    "email": "usamapaktv@gmail.com",
+    "password": "$2b$10$R15eRR6AjDf986WHkuvrUuyjjH.bCDVUsWjBlhgVaQr/dU.cppNk6",
+    "role": "freelancer",
+    "isVerified": true,
+    "_id": "id_0zxupm6mb",
+    "createdAt": "2026-06-29T06:10:09.334Z",
+    "updatedAt": "2026-06-29T06:10:09.335Z"
   }
 ]

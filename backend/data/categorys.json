@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Development & IT",
+    "description": "Web dev, apps backend, PostgreSQL subscriptions, etc.",
+    "icon": "lucide-code",
+    "_id": "id_blge27pca",
+    "createdAt": "2026-06-29T06:34:40.733Z",
+    "updatedAt": "2026-06-29T06:34:40.734Z"
+  },
+  {
+    "name": "Design",
+    "description": "UX architectures, Figma landing pages, brand layouts.",
+    "icon": "lucide-palette",
+    "_id": "id_tv4rtqd6l",
+    "createdAt": "2026-06-29T06:34:40.736Z",
+    "updatedAt": "2026-06-29T06:34:40.738Z"
+  },
+  {
+    "name": "Writing",
+    "description": "SEO copywritings, technical blogs, and papers.",
+    "icon": "lucide-pencil",
+    "_id": "id_s5r5hsoxf",
+    "createdAt": "2026-06-29T06:34:40.740Z",
+    "updatedAt": "2026-06-29T06:34:40.742Z"
+  },
+  {
+    "name": "Marketing",
+    "description": "Social outreach, ads campaigning, business indexing.",
+    "icon": "lucide-megaphone",
+    "_id": "id_83fomnr18",
+    "createdAt": "2026-06-29T06:34:40.743Z",
+    "updatedAt": "2026-06-29T06:34:40.746Z"
+  },
+  {
+    "name": "AI Services",
+    "description": "Prompt workflows, model tuning, custom transformers.",
+    "icon": "lucide-cpu",
+    "_id": "id_ftfhnje4g",
+    "createdAt": "2026-06-29T06:34:40.747Z",
+    "updatedAt": "2026-06-29T06:34:40.749Z"
+  },
+  {
+    "name": "Video Editing",
+    "description": "B-roll montages, sound alignment, cinematic grades.",
+    "icon": "lucide-video",
+    "_id": "id_ad1ga7w81",
+    "createdAt": "2026-06-29T06:34:40.750Z",
+    "updatedAt": "2026-06-29T06:34:40.752Z"
+  }
+]
