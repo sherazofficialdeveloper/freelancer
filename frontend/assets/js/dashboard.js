@@ -1,5 +1,5 @@
 /**
- * Skillnest Workspace Dashboard Controls logic
+ * Farelanceru Workspace Dashboard Controls logic
  */
 
 const initDashboard = async () => {
@@ -709,8 +709,8 @@ const initDashboard = async () => {
             </div>
             <div class="form-group">
               <label class="form-label">Preferred Interface Theme</label>
-              <select id="profile-theme-toggle" class="form-control" onchange="showToast('Display visual theme synced with Skillnest engine!', 'success')">
-                <option value="light">Skillnest Slate Light Canvas (Default Modern)</option>
+              <select id="profile-theme-toggle" class="form-control" onchange="showToast('Display visual theme synced with Farelanceru engine!', 'success')">
+                <option value="light">Farelanceru Slate Light Canvas (Default Modern)</option>
                 <option value="dark">Immersive Midnight Gray Theme</option>
               </select>
             </div>
