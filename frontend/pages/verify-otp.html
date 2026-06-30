@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify security code - Farelancer</title>
+  <title>Verify security code - Skillnest</title>
   
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/responsive.css">
@@ -163,7 +163,7 @@
               localStorage.setItem('user', JSON.stringify(result.data.user));
               document.cookie = `token=${result.data.token}; path=/; max-age=${7 * 24 * 60 * 60}; Secure; SameSite=None;`;
               
-              successMsg.textContent = 'Email verified successfully! Welcome to Farelancer!';
+              successMsg.textContent = 'Email verified successfully! Welcome to Skillnest!';
               successMsg.style.display = 'block';
 
               setTimeout(() => {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Farelancer | Escrow-Backed Freelancing Board</title>
+  <title>Skillnest | Escrow-Backed Freelancing Board</title>
   
   <!-- Global & Landing Style Sheets -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -29,7 +29,7 @@
           🛡️ Zero-Risk Escrow Protection
         </span>
         <h1>Hire Top Freelancers or Get Hired Instantly</h1>
-        <p>A global freelancing marketplace for modern work. Farelancer locks client budgets in secure escrows up front, guaranteeing automatic payouts upon milestone delivery approval.</p>
+        <p>A global freelancing marketplace for modern work. Skillnest locks client budgets in secure escrows up front, guaranteeing automatic payouts upon milestone delivery approval.</p>
         
         <!-- Segmented Search Interface (Satisfies both Gigs and Talents under one premium search query) -->
         <div class="search-container-wrapper">
@@ -435,7 +435,7 @@
         
         <div class="card" style="padding: 25px; border-radius: 12px; background: white; display:flex; flex-direction:column; justify-content:space-between; text-align: left;">
           <p style="font-size: 14px; line-height: 1.6; color: var(--gray-700); font-style: italic; margin-bottom: 20px;">
-            "The double-sided escrow security is revolutionary. Before using Farelancer, we always worried about freelancers disappearing or not producing quality work. Now, with money pre-funded, there is absolute goodwill."
+            "The double-sided escrow security is revolutionary. Before using Skillnest, we always worried about freelancers disappearing or not producing quality work. Now, with money pre-funded, there is absolute goodwill."
           </p>
           <div style="display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--gray-100); padding-top: 15px;">
             <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">MW</div>
@@ -502,7 +502,7 @@
             <i class="fa-solid fa-chevron-down" style="font-size:12px; color:var(--gray-500);"></i>
           </div>
           <p class="faq-answer" style="display: none; margin-top: 12px; font-size: 13.5px; color: var(--gray-600); line-height: 1.6; border-top: 1px solid var(--gray-100); padding-top: 10px; font-weight: normal;">
-            Farelancer charges a standard flat 5% administrative fee on completed releases, which covers server-side Socket.io integrations, alert routing, and disputes resolution arbitration support.
+            Skillnest charges a standard flat 5% administrative fee on completed releases, which covers server-side Socket.io integrations, alert routing, and disputes resolution arbitration support.
           </p>
         </div>
 
@@ -652,7 +652,7 @@
     <div class="container">
       <div class="homepage-cta-banner">
         <h2>Start Hiring Today</h2>
-        <p>Whether you need a dynamic logo developed or a cloud-powered API constructed, Farelancer has experts available right now under safe escrow contracts.</p>
+        <p>Whether you need a dynamic logo developed or a cloud-powered API constructed, Skillnest has experts available right now under safe escrow contracts.</p>
         
         <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
           <a href="/register?role=buyer" class="btn btn-primary" id="cta-bottom-buyer" style="padding: 14px 28px; font-size: 15px;">Post a Gigs Job</a>
@@ -715,7 +715,7 @@
       const updateCTAStats = () => {
         // Wait briefly for auth checks to finish in main bootstrapLayout
         setTimeout(() => {
-          const userObj = window.FarelanceruState.user;
+          const userObj = window.SkillnestuState.user;
           const onboardingPills = document.getElementById('hero-onboarding-pills');
           
           if (userObj) {

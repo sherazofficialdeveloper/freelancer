@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notification Center | Farelancer</title>
+  <title>Notification Center | Skillnest</title>
   
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/responsive.css">
@@ -102,7 +102,7 @@
     
     <!-- Hero Header -->
     <div style="margin-bottom: 30px;">
-      <span class="text-gradient" style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">Farelancer Platform</span>
+      <span class="text-gradient" style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">Skillnest Platform</span>
       <h1 style="font-size: 32px; font-weight: 800; letter-spacing: -0.75px; margin: 0; color: var(--dark);">Notification Center</h1>
       <p style="color: var(--gray-600); font-size: 15px; margin-top: 6px;">Manage your bids, hired jobs, real-time communications, and secure wallet releases instantaneously.</p>
     </div>
@@ -217,7 +217,7 @@
         if (res.ok) {
           const result = await res.json();
           if (result.success && result.data) {
-            window.FarelanceruState.notifications = Array.isArray(result.data) ? result.data : (result.data.notifications || []);
+            window.SkillnestuState.notifications = Array.isArray(result.data) ? result.data : (result.data.notifications || []);
             syncNotificationsFullList();
           }
         } else {
@@ -236,7 +236,7 @@
       const container = document.getElementById('notifications-full-container');
       if (!container) return;
 
-      const items = window.FarelanceruState.notifications || [];
+      const items = window.SkillnestuState.notifications || [];
       
       // Update filter badges count
       const allCount = items.length;
@@ -374,8 +374,8 @@
             if (out.success) {
               // Real-time listener handles reload natively via Socket!
               // But if sockets are offline, we sync fallback manually.
-              if (window.FarelanceruState.notifications) {
-                const alreadyAdded = window.FarelanceruState.notifications.some(n => n._id === out.data._id);
+              if (window.SkillnestuState.notifications) {
+                const alreadyAdded = window.SkillnestuState.notifications.some(n => n._id === out.data._id);
                 if (!alreadyAdded) {
                   window.FarelanceruState.notifications.unshift(out.data);
                   syncNotificationsFullList();
